@@ -23,6 +23,9 @@ static const CGFloat FTBDTabelViewCellHeight = 100;
 static const CGFloat FTBDLayerBorderWidth = 0.5f;
 static const CGFloat FTBDCalenderViewHeight = 420;
 static const CGFloat FTBDDateFilterBottomArrowWidth = 40;
+static const CGFloat FTBDNoNewsLabelWidth = 200;
+static const CGFloat FTBDNoNewsLabelHeight = 40;
+
 
 //UITable Cell Identifer
 static NSString *FTBDNewsTableViewCellIdentifer = @"FTBDNewsTableViewCell";
@@ -30,6 +33,7 @@ static NSString *FTBDNewsSearchDefaultKey = @"富途";
 static NSString *FTBDNewsSearchPlaceholder = @"请输入要搜索的关键字";
 static NSString *FTBDNewsMainViewTitle = @"热点新闻";
 static NSString *FTBDNewsDateFilterStr = @"日期筛选";
+static NSString *FTBDNoNewsMessage = @"当前没有新闻可以显示";
 
 @interface FTBDNewsViewController ()
 <UITextFieldDelegate, FTBDNewsDelegate, UITableViewDelegate, UITableViewDataSource,
@@ -52,6 +56,8 @@ FTCalendarDelegate>
 @property (nonatomic, strong) UIButton *dateFilterButton;//开启时间过滤后的Button，显示过滤的时间
 @property (nonatomic, strong) UIButton *dateFilterArrowButton;//开始时间过滤后的button，显示箭头
 @property (nonatomic, strong) FTCalendarView *calendarView;
+
+@property (nonatomic, strong) UILabel *noNewsMessageLabel;
 //Data
 @property (nonatomic, strong) FTBDNewsDataManager *newsManager;
 //Date
@@ -115,6 +121,7 @@ FTCalendarDelegate>
         [weakSelf showCalendar];
     };
     [dateFilterView addSubview:placeholderButton];
+    
     //开启日期筛选之后显示的View
     self.dateFilterAbovedView = [[UIView alloc] initWithFrame:CGRectMake(searchTextFieldWidth, _mainViewYPosition, searchTextFieldWidth, FTBDSearchTextFieldHeight)];
     self.dateFilterAbovedView.backgroundColor = [UIColor whiteColor];
@@ -146,8 +153,14 @@ FTCalendarDelegate>
     self.newsTableView.dataSource = self;
     self.newsTableView.delegate = self;
     [self.newsTableView registerClass:[FTBDNewsTableViewCell class] forCellReuseIdentifier:FTBDNewsTableViewCellIdentifer];
-    
     [self.view addSubview:self.newsTableView];
+    
+    //当过滤日期后没有当天的新闻后，显示该label用于提示
+    self.noNewsMessageLabel = [[UILabel alloc] initWithFrame:CGRectMake((_mainWidth - FTBDNoNewsLabelWidth) / 2, (_mainHeight - FTBDNoNewsLabelHeight) / 2, FTBDNoNewsLabelWidth, FTBDNoNewsLabelHeight)];
+    self.noNewsMessageLabel.textAlignment = NSTextAlignmentCenter;
+    self.noNewsMessageLabel.text = FTBDNoNewsMessage;
+    self.noNewsMessageLabel.hidden = YES;
+    [self.view addSubview:self.noNewsMessageLabel];
 }
 
 - (void)initProperty
@@ -176,7 +189,13 @@ FTCalendarDelegate>
     if([keyword isEqualToString:@""]) {
         return;
     }
+    NSLog(@"FTBDNewsViewController->searchNews: 准备拉取新闻，keyword: %@", keyword);
     [_newsManager pullBaiduNews:keyword date:date];
+}
+
+- (void)hideKeyboard
+{
+    [self.searchTextField resignFirstResponder];
 }
 
 //弹出日历
@@ -186,6 +205,8 @@ FTCalendarDelegate>
     [self.view bringSubviewToFront:self.calendarView];
     [self.dateFilterArrowButton setImage:[UIImage imageNamed:FTResourceUpArrowNormal] forState:UIControlStateNormal];
     [self.dateFilterArrowButton setImage:[UIImage imageNamed:FTResourceUpArrowHighlight] forState:UIControlStateHighlighted];
+    
+    [self hideKeyboard];//显示日历应隐藏键盘
 }
 
 //隐藏日历
@@ -196,29 +217,16 @@ FTCalendarDelegate>
     [self.dateFilterArrowButton setImage:[UIImage imageNamed:FTResourceDownArrowHighlight] forState:UIControlStateHighlighted];
 }
 
-- (void)resetFilter
-{
-    self.selectedDate = nil;
-    _isFilterDate = NO;
-    self.dateFilterAbovedView.hidden = YES;
-}
-
-- (void)beginFilter:(NSDate *)date
-{
-    self.selectedDate = date;
-    _isFilterDate = YES;
-    self.dateFilterAbovedView.hidden = NO;
-    [self.dateFilterButton setTitle:[FTCalendarHelper stringOfDate:date] forState:UIControlStateNormal];
-}
-
 //更新Keyword，将tableview拉回顶部，同时拉取数据
 - (void)refreshKeywordAndNews
 {
 //    [self resetFilter];//刷新新闻不应该重置日期过滤
+    //但是应该隐藏日历
+    [self hiddenCalendar];
     [self.newsTableView setContentOffset:CGPointZero animated:YES];
     
     _currentKeyword = self.searchTextField.text;
-    NSLog(@"输入的搜索关键字 = %@", _currentKeyword);
+    NSLog(@"FTBDNewsViewController->refreshKeywordAndNews: 输入的搜索关键字 = %@", _currentKeyword);
     [self searchNews:_currentKeyword date:self.selectedDate];
 }
 
@@ -234,12 +242,11 @@ FTCalendarDelegate>
 {
     //如果键盘是first responder，则resign，之后会自动调用刷新方法
     if([self.searchTextField isFirstResponder]) {
-        [self.searchTextField resignFirstResponder];
+        [self hideKeyboard];
     } else {//如果键盘不是first respnder，则直接调用刷新方法
         [self refreshKeywordAndNews];
     }
 }
-
 
 //dateFilterButton按下事件，用于通知dateFilterArrowButton事件，主要是为了显示箭头被按下的动画效果
 - (void)dateFilterBtnTouchDown:(UIButton *)sender
@@ -262,12 +269,10 @@ FTCalendarDelegate>
     }
 }
 
-
-#pragma mark - touch callback
-
+//最底层view触摸响应
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    [self.searchTextField resignFirstResponder];
+    [self hideKeyboard];
 }
 
 #pragma mark - UITabelViewDelegate
@@ -285,12 +290,13 @@ FTCalendarDelegate>
     
     //获取对应的UIImage，先判断是否有ImageURL
     UIImage *image = nil;
-//    if(![data.imageUrls isEqual:[NSNull null]]) {
-//        image = [self.newsManager imageForId:data.newsId];
-//        if(image == nil) {
-//            [self.newsManager pullNewsImage:data cellId:index];
-//        }
-//    }
+    if(![data.imageUrls isEqual:[NSNull null]]) {
+        image = [self.newsManager imageForId:data.newsId];
+        if(image == nil) {
+            NSLog(@"FTBDNewsViewController->cellForRowAtIndexPath->RequestImage: 请求图片, imageUrls: %@", [data.imageUrls firstObject]);
+            [self.newsManager pullNewsImage:data cellId:index];
+        }
+    }
     
     [cell updateImageView:image title:data.title time:data.timeStr frame:CGRectMake(0, index * FTBDTabelViewCellHeight, CGRectGetWidth([UIScreen mainScreen].bounds), FTBDTabelViewCellHeight)];
     
@@ -312,10 +318,15 @@ FTCalendarDelegate>
 {
     NSInteger index = indexPath.row;
     if(index < 0) {
-        NSLog(@"点击了第%ld行，行数竟然是负数？", indexPath.row);
+        NSLog(@"FTBDNewsViewController->didSelectRowAtIndexPath->点击了第%ld行，行数竟然是负数？", indexPath.row);
         return;
     }
     FTBDNewsData *data = [_currentNews objectAtIndex:index];
+    if(data == nil) {
+        NSLog(@"FTBDNewsViewController->didSelectRowAtIndexPath->data为空");
+        return;
+    }
+    NSLog(@"FTBDNewsViewController->didSelectRowAtIndexPath->data ImageURls：%@", data.imageUrls);
     NSString *url = data.url;
     FTBDNewsDetailsController *controller = [[FTBDNewsDetailsController alloc] init];
     [controller setupURL:url];
@@ -327,14 +338,14 @@ FTCalendarDelegate>
 //textfield
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    [self.searchTextField resignFirstResponder];
+    [self hideKeyboard];
+    [self refreshKeywordAndNews];
     return YES;
 }
 
-//textfield
-- (void)textFieldDidEndEditing:(UITextField *)textField
+- (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    [self refreshKeywordAndNews];
+    [self hiddenCalendar];
 }
 
 #pragma mark - FTBDNewsDelegate
@@ -342,9 +353,16 @@ FTCalendarDelegate>
 //通知新闻拉取结果
 - (void)notifyData:(NSArray *)news
 {
+
     _currentNews = news;
     __weak FTBDNewsViewController *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        if(news == nil || news.count == 0) {
+            [weakSelf.view bringSubviewToFront:self.noNewsMessageLabel];
+            weakSelf.noNewsMessageLabel.hidden = NO;
+        } else {
+            weakSelf.noNewsMessageLabel.hidden = YES;
+        }
         [weakSelf.newsTableView reloadData];
     });
 }
@@ -363,7 +381,7 @@ FTCalendarDelegate>
 - (void)doneWithDate:(NSDate *)date
 {
     [self hiddenCalendar];
-    NSLog(@"date: %@", [FTCalendarHelper stringOfDate:date]);
+    NSLog(@"FTBDNewsViewController->doneWithDate: date: %@", [FTCalendarHelper stringOfDate:date]);
     [self updateDateFilter:date];
 }
 
@@ -383,6 +401,21 @@ FTCalendarDelegate>
         [self beginFilter:date];
     }
     [self.newsManager requireNews:_currentKeyword date:date];
+}
+
+- (void)resetFilter
+{
+    self.selectedDate = nil;
+    _isFilterDate = NO;
+    self.dateFilterAbovedView.hidden = YES;
+}
+
+- (void)beginFilter:(NSDate *)date
+{
+    self.selectedDate = date;
+    _isFilterDate = YES;
+    self.dateFilterAbovedView.hidden = NO;
+    [self.dateFilterButton setTitle:[FTCalendarHelper stringOfDate:date] forState:UIControlStateNormal];
 }
 
 #pragma mark - Tools

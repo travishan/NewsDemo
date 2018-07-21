@@ -84,13 +84,12 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
 - (void)requestBDNewsImage:(NSString *)_url block:(FTBDImageDownloadBlock)_block
 {
     NSString *_urlCharacter = [_url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSLog(@"%@", _urlCharacter);
     NSURL *url = [NSURL URLWithString:_urlCharacter];
     
-    
-    NSURLSession *ses = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration ephemeralSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];
-    NSURLSessionDataTask *dataTask = [ses dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0];
+    [request setValue:@"never" forHTTPHeaderField:@"referer"];
 
+    NSURLSessionDataTask *dataTask = [_session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if(response != nil) {
             NSLog(@"length = %lld, name = %@", response.expectedContentLength, response.suggestedFilename);
         }
@@ -101,8 +100,6 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
         if(error != nil) {
             NSLog(@"加载图片时异常，错误原因：%@", error.localizedDescription);
         }
-        NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"data str = %@", str);
         _block(data);
     }];
     block = _block;

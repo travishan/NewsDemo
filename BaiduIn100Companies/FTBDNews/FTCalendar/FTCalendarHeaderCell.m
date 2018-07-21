@@ -185,7 +185,6 @@ static NSString *alltimeButtonTitle = @"所有时间";
 //修改为所有时间button，点击后调用delegate，传回所有时间的事件
 - (void)updateView:(NSDate *)date
 {
-    NSLog(@"更新Header View Cell");
     //左上角时间Label
 //    [self.dateLabelBtn setTitle:[FTCalendarHelper stringOfDate:date] forState:UIControlStateNormal];
 //    //判断是否为今天，是则显示（今天）字符串
@@ -195,7 +194,6 @@ static NSString *alltimeButtonTitle = @"所有时间";
 //        label.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
 //        [self addSubview:label];
 //    }
-    
     
     //更新year button title 和 month button title
     NSDateComponents *comp = [FTCalendarHelper components:self.date];

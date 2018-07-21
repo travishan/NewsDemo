@@ -13,11 +13,15 @@
 #import "FTCalendarHelper.h"
 
 
+static const char *FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQueueName";
+
 @interface FTBDNewsDataManager ()
 {
     FTBDNewsFetcher *_fetcher;
+    dispatch_queue_t _serialNotifyQueue;
 }
 
+@property (nonatomic, strong) FTBDNewsFetcher *fetcher;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, FTBDNews *> *newsDict;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, UIImage *> *imageDict;
 
@@ -32,6 +36,8 @@
     if (self) {
         _fetcher = [[FTBDNewsFetcher alloc] init];
         _newsDict = [[NSMutableDictionary alloc] initWithCapacity:5];
+        _imageDict = [[NSMutableDictionary alloc] initWithCapacity:5];
+        _serialNotifyQueue = dispatch_queue_create(FBBDNewsSerialNotifyQueueName, DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -40,21 +46,21 @@
 
 - (void)pullBaiduNews:(NSString *)keyword date:(NSDate *)date
 {
+    __weak FTBDNewsDataManager *weakSelf = self;
+    
     [_fetcher requestBDNews:keyword block:^(NSString *keyword, NSData *data) {
         //获取数据，存储到字典中
         FTBDNews *res = [FTBDNewsDataManager analysisNews:keyword data:data];
         if(res == nil) {
-            NSLog(@"pullBaiduNews-->Fetcher:requestBDNews，数据解析为空。");
+            NSLog(@"FTBDNewsDataManager->pullBaiduNews: 数据解析为空。");
             return;
         }
-        [self.newsDict setObject:res forKey:keyword];
-        __weak FTBDNewsDataManager *weakSelf = self;
+        [weakSelf.newsDict setObject:res forKey:keyword];
         if(date == nil) {
             [weakSelf notifyToDelegate:res.data];
         } else {
             [weakSelf requireNews:keyword date:date];
         }
-        
     }];
 }
 
@@ -69,16 +75,21 @@
         if(url == nil) {
             return;
         }
-        __weak FTBDNewsDataManager *_weakSelf = self;
+        __weak FTBDNewsDataManager *weakSelf = self;
         FTBDImageDownloadBlock blk = ^(NSData *data) {
             UIImage *im = [UIImage imageWithData:data];
-            NSLog(@"data.length = %ld", data.length);
-            [_weakSelf.imageDict setObject:im forKey:newsData.newsId];
-            if([_weakSelf.delegate respondsToSelector:@selector(notifyImageDownload:)]) {
-                [_weakSelf.delegate notifyImageDownload:cellId];
+            if(im == nil) {
+                return;
+            }
+            [weakSelf.imageDict setObject:im forKey:newsData.newsId];
+            if([weakSelf.delegate respondsToSelector:@selector(notifyImageDownload:)]) {
+                [weakSelf.delegate notifyImageDownload:cellId];
             }
         };
-        [_fetcher requestBDNewsImage:url block:blk];
+        dispatch_async(_serialNotifyQueue, ^{
+            [weakSelf.fetcher requestBDNewsImage:url block:blk];
+        });
+        
     }
 }
 
@@ -92,33 +103,39 @@
     FTBDNews *news = [self.newsDict objectForKey:keyword];
     if(news != nil) {
         __weak FTBDNewsDataManager *weakSelf = self;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        dispatch_async(_serialNotifyQueue, ^{
             NSMutableArray *arr = [NSMutableArray arrayWithCapacity:news.data.count];
             for(FTBDNewsData *data in news.data) {
                 if([FTCalendarHelper isSameDay:data.publishDate date2:date]) {
                     [arr addObject:data];
                 }
             }
+            NSLog(@"FTBDNewsDataManager->requiresNews->block(serialQueue): data count:%ld", arr.count);
             [weakSelf notifyToDelegate:arr];
         });
         
     }
 }
 
-#pragma mark - private
+#pragma mark - notify
 
 - (void)notifyToDelegate:(NSArray *)dataArr
 {
-    if([self.delegate respondsToSelector:@selector(notifyData:)]) {
-        [self.delegate notifyData:dataArr];
-    }
+    __weak FTBDNewsDataManager *weakSelf = self;
+    dispatch_async(_serialNotifyQueue, ^{
+        if([weakSelf.delegate respondsToSelector:@selector(notifyData:)]) {
+            NSLog(@"FTBDNewsDataManager->notifyToDelegate: 通知delegate数据更新，data数量: %ld", dataArr.count);
+            [weakSelf.delegate notifyData:dataArr];
+        }
+    });
+
 }
 
 - (void)nofityWithAllData:(NSString *)keyword
 {
     FTBDNews *res = [_newsDict objectForKey:keyword];
     if(res == nil) {
-        NSLog(@"从Manager中获取数据失败，keyword：%@", keyword);
+        NSLog(@"FTBDNewsDataManager->notifyWithAllData: 字典中没有keyword对应的数据，keyword：%@", keyword);
         return;
     }
     [self notifyToDelegate:res.data];

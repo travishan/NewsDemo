@@ -207,23 +207,5 @@ static NSString *alltimeButtonTitle = @"所有时间";
     }
 }
 
-#pragma mark - Action/Setter Getter
-
-- (void)donePressAct:(UIButton *)sender
-{
-    NSLog(@"Press done button");
-}
-
-
-//- (void)setDoneButtonBlock:(FTCalendarButtonBlock)block
-//{
-//    self.doneBtn.btnBlock = block;
-//}
-//
-//- (void)setAlltimeButtonBlock:(FTCalendarButtonBlock)block
-//{
-//    self.alltimeBtn.btnBlock = block;
-//}
-
 
 @end

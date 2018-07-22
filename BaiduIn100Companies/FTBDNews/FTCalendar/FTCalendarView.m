@@ -16,6 +16,12 @@
 static const int sFTCollectionViewSectionCount = 3;
 static const int sFTMainSectionHeight = 280;
 
+/**
+ * 日历CollectionView section index枚举，共三个区
+ * 1. 日历头部 FTCalendarHeaderSection
+ * 2. 显示周一到周日信息区 FTCalendarWeekTitleSection
+ * 3. 显示日期的区 FTCalendarMainSection
+ */
 typedef NS_ENUM(NSInteger, FTCalendarSectionType) {
     FTCalendarHeaderSection = 0,
     FTCalendarWeekTitleSection,

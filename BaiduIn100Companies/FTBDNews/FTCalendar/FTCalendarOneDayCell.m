@@ -20,7 +20,7 @@ static const CGFloat FTCalendarOneDayButtonMarginDouble = FTCalendarOneDayButton
 
 @implementation FTCalendarOneDayCell
 
-#pragma mark - LifeCycle
+#pragma mark - life cycle
 
 - (instancetype)initWithFrame:(CGRect)frame
 {

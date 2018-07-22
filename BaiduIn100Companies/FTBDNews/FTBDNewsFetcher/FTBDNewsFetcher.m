@@ -42,7 +42,7 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
 @implementation FTBDNewsFetcher
 
 
-#pragma mark - LifeCycle
+#pragma mark - life cycle
 
 - (instancetype)init
 {
@@ -58,7 +58,7 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
 }
 
 
-#pragma mark - Download
+#pragma mark - download
 
 - (void)requestBDNews:(NSString *)keyword block:(FTBDNewsFetcherBlock)block
 {
@@ -110,7 +110,7 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
 }
 
 
-#pragma mark NSURLSessionDataDelegate
+#pragma mark - NSURLSessionDataDelegate
 
 //处理https CA证书
 - (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler

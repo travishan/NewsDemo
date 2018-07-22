@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "FTCalendarButton.h"
 
-//用于FTCalendarHeaderDelegate中的按钮事件判断
+/**
+ * 用于FTCalendarHeaderDelegate中的按钮事件判断
+ */
 typedef NS_ENUM(NSUInteger, FTCalendarHeaderActionType) {
     FTCalendarHeaderActionDone = 0,
     FTCalendarHeaderActionAlltime,
@@ -33,9 +35,5 @@ typedef NS_ENUM(NSUInteger, FTCalendarHeaderActionType) {
  * 每次刷新Collection View时调用该方法更新Header Cell中的View
  */
 - (void)updateViewWithDate:(NSDate *)date;
-
-//设置Button Block
-//- (void)setDoneButtonBlock:(FTCalendarButtonBlock)block;
-//- (void)setAlltimeButtonBlock:(FTCalendarButtonBlock)block;
 
 @end

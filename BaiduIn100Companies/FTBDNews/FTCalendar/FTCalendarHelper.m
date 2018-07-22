@@ -15,59 +15,13 @@ static NSCalendar *sFTCalendar;
 
 @implementation FTCalendarHelper
 
-
-//static FTCalendarHelper *instance = nil;
-
-
-//+ (instancetype)sharedInstance
-//{
-//    static dispatch_once_t onceToken;
-//    dispatch_once(&onceToken, ^{
-//        if(instance == nil) {
-//            instance = [[FTCalendarHelper alloc] init];
-//        }
-//    });
-//    return instance;
-//}
-
-#pragma mark - LifeCycle
-
-//+ (instancetype)allocWithZone:(struct _NSZone *)zone
-//{
-//    static dispatch_once_t onceToken;
-//    dispatch_once(&onceToken, ^{
-//        if(instance == nil) {
-//            instance = [super allocWithZone:zone];
-//        }
-//    });
-//    return instance;
-//}
-//
-//- (instancetype)init
-//{
-//    self = [super init];
-//    if (self) {
-//        _calendar = [NSCalendar currentCalendar];
-//        [_calendar setFirstWeekday:2];
-//    }
-//    return self;
-//}
-//
-//- (id)copy
-//{
-//    return self;
-//}
-
 + (void)initialize
 {
     sFTCalendar = [NSCalendar currentCalendar];
 }
 
 
-
 #pragma mask - Getter/Setter
-
-
 
 //返回当月的天数
 + (NSInteger)dayCountOfMonth:(NSDate *)date

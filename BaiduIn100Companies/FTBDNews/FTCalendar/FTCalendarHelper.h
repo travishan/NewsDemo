@@ -10,10 +10,6 @@
 
 @interface FTCalendarHelper : NSObject
 
-//@property (nonatomic, strong) NSCalendar *calendar;
-
-
-//+ (instancetype)sharedInstance;
 
 /**
  * 获取指定月的天数

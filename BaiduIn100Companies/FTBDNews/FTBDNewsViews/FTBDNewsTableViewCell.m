@@ -10,7 +10,8 @@
 
 static const CGFloat FTBDImageViewWidthMargin = 10;
 static const CGFloat FTBDImageViewHeightMargin = 10;
-static const CGFloat FTBDImageViewWidth = 80;
+static const CGFloat FTBDImageViewWidth = 121;
+static const CGFloat FTBDImageViewHeight = 81;
 
 static const CGFloat FTBDTitleLabelHeight = 40;
 static const CGFloat FTBDTitleLabelWitdhMargin = 10;
@@ -76,12 +77,12 @@ static const CGFloat FTBDBottomLineWidth = 0.5f;
 {
     CGFloat width = CGRectGetWidth(self.frame);
     CGFloat height = CGRectGetHeight(self.frame);
-    CGFloat widthOffset = FTBDImageViewWidthMargin;
-    CGFloat labelWidth = 0;
+    CGFloat widthOffset = FTBDImageViewWidthMargin;//记录view横坐标的偏移量
+    CGFloat labelWidth = 0;//计算label的宽度
 
     [_imageView setFrame:CGRectMake(widthOffset, FTBDImageViewHeightMargin, FTBDImageViewWidth, height - FTBDImageViewWidthMargin * 2)];
 
-    widthOffset += FTBDImageViewWidth + FTBDTitleLabelWitdhMargin;
+    widthOffset += FTBDImageViewWidth + FTBDTitleLabelWitdhMargin;//此时横坐标的偏移量在imageview的右边+一个margin的距离
     labelWidth = width - widthOffset - FTBDTitleLabelWitdhMargin;
     
     [_titleLabel setFrame:CGRectMake(widthOffset, FTBDTitleLabelHeightMargin, labelWidth, FTBDTitleLabelHeight)];

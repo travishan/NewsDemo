@@ -12,6 +12,7 @@
 static NSString *FTBDNewsURL = @"https://120.76.205.241/news/baidu?apikey=qI9UW0gCBOdRSyUVjLo1tyHDZe4rwjHYs0tngCXcGQpkc6hT9X7usZq0tTYhUtDn&page=4";
 
 static NSString *FTBDNewsURLParametersKeyword = @"&kw=";
+static NSString *FTBDNewsHttpReferrerContent = @"origin";
 
 //static const float FTBaiduNewsRequestOuttime = 10.0;
 
@@ -87,18 +88,20 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
     NSURL *url = [NSURL URLWithString:_urlCharacter];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0];
-    [request setValue:@"never" forHTTPHeaderField:@"referer"];
+    NSLog(@"FTBDNewsFetcher->requestBDNewsImage->referrer before: %@", [request valueForHTTPHeaderField:@"referer"]);
+    [request setValue:FTBDNewsHttpReferrerContent forHTTPHeaderField:@"referer"];
+    NSLog(@"FTBDNewsFetcher->requestBDNewsImage->referrer after: %@", [request valueForHTTPHeaderField:@"referer"]);
 
     NSURLSessionDataTask *dataTask = [_session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if(response != nil) {
-            NSLog(@"length = %lld, name = %@", response.expectedContentLength, response.suggestedFilename);
+            NSLog(@"FTBDNewsFetcher->requestBDNewsImage->length = %lld, name = %@", response.expectedContentLength, response.suggestedFilename);
         }
         if(data == nil) {
-            NSLog(@"加载图片时异常，错误原因：data为空");
+            NSLog(@"FTBDNewsFetcher->requestBDNewsImage->加载图片时异常，错误原因：data为空");
             return;
         }
         if(error != nil) {
-            NSLog(@"加载图片时异常，错误原因：%@", error.localizedDescription);
+            NSLog(@"FTBDNewsFetcher->requestBDNewsImage->加载图片时异常，错误原因：%@", error.localizedDescription);
         }
         _block(data);
     }];
@@ -112,7 +115,7 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
 //处理https CA证书
 - (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler
 {
-    NSLog(@"处理证书");
+    NSLog(@"FTBDNewsFetcher->didReceiveChallenge->处理证书");
     NSURLCredential *credential = [[NSURLCredential alloc] initWithTrust:challenge.protectionSpace.serverTrust];
     completionHandler(NSURLSessionAuthChallengeUseCredential,credential);
 }
@@ -121,7 +124,7 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler
 {
     long long expLength = response.expectedContentLength;
-    NSLog(@"length = %lld", expLength);
+    NSLog(@"FTBDNewsFetcher->didReceiveResponse->length = %lld", expLength);
     if(expLength == -1) {
         completionHandler(NSURLSessionResponseCancel);
     } else {

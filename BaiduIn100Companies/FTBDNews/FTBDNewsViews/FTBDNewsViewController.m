@@ -241,11 +241,13 @@ FTCalendarDelegate>
 - (void)refreshNewsAction:(UIBarButtonItem *)sender
 {
     //如果键盘是first responder，则resign，之后会自动调用刷新方法
-    if([self.searchTextField isFirstResponder]) {
-        [self hideKeyboard];
-    } else {//如果键盘不是first respnder，则直接调用刷新方法
-        [self refreshKeywordAndNews];
-    }
+//    if([self.searchTextField isFirstResponder]) {
+//        [self hideKeyboard];
+//    } else {//如果键盘不是first respnder，则直接调用刷新方法
+//        [self refreshKeywordAndNews];
+//    }
+    [self hideKeyboard];
+    [self refreshKeywordAndNews];
 }
 
 //dateFilterButton按下事件，用于通知dateFilterArrowButton事件，主要是为了显示箭头被按下的动画效果

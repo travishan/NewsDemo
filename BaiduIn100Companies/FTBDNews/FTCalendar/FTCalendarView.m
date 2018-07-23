@@ -243,7 +243,7 @@ static const int sFTMainSectionEdge = 20;//20
             [self updateSelectedDateWithIndex:cell.index];
             //首先清空上次修改的button样式
             if(self.lastSelectedCell != nil) {
-                [self.lastSelectedCell updateButtonStyleToOriginal];
+                [self.lastSelectedCell updateButtonStyleToBackup];
             }
             //如果是同一月才渲染
             if([FTCalendarHelper isSameMonth:self.selectedDate date2:self.currentDate]) {
@@ -294,24 +294,31 @@ static const int sFTMainSectionEdge = 20;//20
     
     FTCalendarOneDayCell *cell = (FTCalendarOneDayCell *)[collectionView dequeueReusableCellWithReuseIdentifier:sFTCalendarOneDayCellIdentifier forIndexPath:indexPath];
     static int index = -1;
-    NSString *title = @"";
+    
     [cell updateCellWithDateIndex:-1];
-    [cell updateButtonStyleToOriginal];
+    [cell updateButtonStyleToDefault];
     //判断当前item的cell是否应该开始显示日期
     if(item >= self.weekIndexOfFirstDay && index < self.dayCountOfMonth) {
         if(index == -1) {
             index = 0;
         }
-        title = [NSString stringWithFormat:@"%d", index + 1];
         [cell updateCellWithDateIndex:index];
+        [cell updateCellWithTitle:[NSString stringWithFormat:@"%d", index + 1] frame:CGRectMake(0, 0, self.mainSectionCellWidth, self.mainSectionCellHeight)];
         NSDate *indexDate = [FTCalendarHelper dateFromIndex:index date:self.currentDate];
+        //判断当前cell是否为今天，是则修改button为今天的样式
+        if([FTCalendarHelper isSameDay:indexDate date2:[NSDate date]]) {
+            [cell updateButtonStyleToToday];
+        }
+        //判断当前cell是否是被选中的cell，是则修改button为被选中的样式
         if([FTCalendarHelper isSameDay:indexDate date2:self.selectedDate]) {
             [cell updateButtonStyleToSelected];
             self.lastSelectedCell = cell;
         }
         index++;
+    } else {
+        [cell updateCellWithTitle:@"" frame:CGRectMake(0, 0, self.mainSectionCellWidth, self.mainSectionCellHeight)];
     }
-    [cell updateCellWithTitle:title frame:CGRectMake(0, 0, self.mainSectionCellWidth, self.mainSectionCellHeight)];
+    
 
     //当item达到最后一个时，重置index到-1，
     //mainSectionCellCount是当前日期区需要显示的item数，35个或者42个，每个月可能不一样。

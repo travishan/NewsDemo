@@ -25,8 +25,6 @@ static const CGFloat FTBDBottomLineWidth = 0.5f;
     UIImageView *_imageView;
     UILabel *_titleLabel;
     UILabel *_timeLabel;
-    
-    UIView *_maskView;
     UILabel *_bottomLine;
 }
 
@@ -46,21 +44,12 @@ static const CGFloat FTBDBottomLineWidth = 0.5f;
 - (void)initUI
 {
     _imageView = [[UIImageView alloc] init];
-//    _imageView.layer.borderWidth = 1.0;
     
     _titleLabel = [[UILabel alloc] init];
     _titleLabel.font = [UIFont systemFontOfSize:16];
-//    _titleLabel.layer.borderWidth = 1.0;
     
     _timeLabel = [[UILabel alloc] init];
     _timeLabel.font = [UIFont systemFontOfSize:14];
-//    _timeLabel.layer.borderWidth = 1.0;
-    
-    _maskView = [[UIView alloc] init];
-    _maskView.layer.borderWidth = 1.0;
-    [_maskView setUserInteractionEnabled:YES];
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pressNews:)];
-    [_maskView addGestureRecognizer:tapGesture];
     
     _bottomLine = [[UILabel alloc] init];
     _bottomLine.text = @"";
@@ -69,7 +58,6 @@ static const CGFloat FTBDBottomLineWidth = 0.5f;
     [self addSubview:_imageView];
     [self addSubview:_titleLabel];
     [self addSubview:_timeLabel];
-//    [self addSubview:_maskView];
     [self addSubview:_bottomLine];
 }
 
@@ -80,20 +68,19 @@ static const CGFloat FTBDBottomLineWidth = 0.5f;
     CGFloat widthOffset = FTBDImageViewWidthMargin;//记录view横坐标的偏移量
     CGFloat labelWidth = 0;//计算label的宽度
 
-    [_imageView setFrame:CGRectMake(widthOffset, FTBDImageViewHeightMargin, FTBDImageViewWidth, height - FTBDImageViewWidthMargin * 2)];
-
+//    [_imageView setFrame:CGRectMake(widthOffset, FTBDImageViewHeightMargin, FTBDImageViewWidth, height - FTBDImageViewWidthMargin * 2)];
+    [_imageView setFrame:CGRectMake(widthOffset, FTBDImageViewHeightMargin, FTBDImageViewWidth, FTBDImageViewHeight)];
+    
     widthOffset += FTBDImageViewWidth + FTBDTitleLabelWitdhMargin;//此时横坐标的偏移量在imageview的右边+一个margin的距离
     labelWidth = width - widthOffset - FTBDTitleLabelWitdhMargin;
     
     [_titleLabel setFrame:CGRectMake(widthOffset, FTBDTitleLabelHeightMargin, labelWidth, FTBDTitleLabelHeight)];
     [_timeLabel setFrame:CGRectMake(widthOffset, FTBDTitleLabelHeightMargin + FTBDTitleLabelHeight, labelWidth, FTBDTitleLabelHeight)];
-    [_maskView setFrame:CGRectMake(0, 0, width, height)];
     
     [_bottomLine setFrame:CGRectMake(0, height - FTBDBottomLineWidth, width, 1.0)];//line的高度向上挪1，空出1.0的高度
-//    NSLog(@"更新子Views的Layout，width = %f, height = %f", width, height);
 }
 
-- (void)updateImageView:(UIImage *)image title:(NSString *)title time:(NSString *)time frame:(CGRect)frame
+- (void)updateImageView:(UIImage *)image title:(NSString *)title time:(NSString *)time frame:(CGRect)frame readed:(BOOL)readed
 {
     [self setFrame:frame];
     if(image == nil) {
@@ -103,7 +90,11 @@ static const CGFloat FTBDBottomLineWidth = 0.5f;
     }
     _titleLabel.text = title;
     _timeLabel.text = time;
-//    [self updateSubViews];
+    if(readed) {
+        self.backgroundColor = [UIColor colorWithRed:0.82 green:0.82 blue:0.82 alpha:1.0];
+    } else {
+        self.backgroundColor = [UIColor whiteColor];
+    }
 }
 
 #pragma mark - Callback

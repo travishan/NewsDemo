@@ -10,12 +10,13 @@
 #import "FTCalendarHelper.h"
 #import "FTBDResource.h"
 
-static const int FTCalendarHeaderHeight = 80;
-static const int FTCalendarHeaderHalfHeight = FTCalendarHeaderHeight / 2;
-//static const int FTCalendarHeaderDateLabelWidth = 120;
-static const int FTCalendarHeaderAlltimeButtonWidth = 120;
-
-static const int FTCalendarHeaderDoneButtonWidth = 48;
+static const CGFloat FTCalendarHeaderHeight = 80;//该view的高度
+static const CGFloat FTCalendarHeaderHalfHeight = FTCalendarHeaderHeight / 2;//该view高度的一半
+static const CGFloat FTCalendarHeaderAlltimeButtonWidth = 120;//所有时间按钮的宽度
+static const CGFloat FTCalendarHeaderDoneButtonWidth = 48;//确认按钮的宽度
+static const CGFloat FTCalendarHeaderLeftArrowWidth = 20;//左箭头的宽度
+static const CGFloat FTCalendarHeaderLeftArrowMargin = 60;//左箭头距离左边边缘距离
+static const CGFloat FTCalendarHeaderTimeLabelWidth = 60;//左箭头距离左边边缘距离
 
 //用于判断按钮是显示年的view还是显示月的view
 static const NSInteger FTCalendarYearLabelTag = 100;
@@ -130,31 +131,31 @@ static NSString *alltimeButtonTitle = @"所有时间";
 //生成一个View，包含一个left arrow，一个right arrow，一个显示时间的label
 - (UIView *)makeDateSwitchViewWithOffset:(NSInteger)offset block:(FTCalendarButtonBlock)block tag:(NSInteger)tag;
 {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(offset, 40, CGRectGetWidth(self.frame) / 2, 40)];
+    CGFloat viewWidth = CGRectGetWidth(self.frame) / 2;
     
-    int leftWidth = 70;
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(offset, FTCalendarHeaderHalfHeight, viewWidth, FTCalendarHeaderHalfHeight)];
+    
+    int leftWidth = FTCalendarHeaderLeftArrowMargin;
     
     FTCalendarButton *leftArrow = [FTCalendarButton buttonWithType:UIButtonTypeCustom];
-    leftArrow.frame = CGRectMake(leftWidth, 10, 12, 12);
-    [leftArrow setTitle:@"L" forState:UIControlStateNormal];
+    leftArrow.frame = CGRectMake(leftWidth, 0, FTCalendarHeaderLeftArrowWidth, FTCalendarHeaderHalfHeight);
     leftArrow.btnBlock = block;
     leftArrow.tag = tag - 1;
     [leftArrow setImage:[UIImage imageNamed:FTResourceLeftArrowNormal] forState:UIControlStateNormal];
     [leftArrow setImage:[UIImage imageNamed:FTResourceLeftArrowHighlight] forState:UIControlStateHighlighted];
     [view addSubview:leftArrow];
     
-    leftWidth += 12;
+    leftWidth += FTCalendarHeaderLeftArrowWidth;
     
     FTCalendarButton *label = [FTCalendarButton buttonWithType:UIButtonTypeCustom];
     label.tag = tag;
-    label.frame = CGRectMake(leftWidth, 10, 60, 12);
+    label.frame = CGRectMake(leftWidth, 0, FTCalendarHeaderTimeLabelWidth, FTCalendarHeaderHalfHeight);
     [view addSubview:label];
     
-    leftWidth += 60;
+    leftWidth += FTCalendarHeaderTimeLabelWidth;
     
     FTCalendarButton *rightArrow = [FTCalendarButton buttonWithType:UIButtonTypeCustom];
-    rightArrow.frame = CGRectMake(leftWidth, 10, 12, 12);
-    [rightArrow setTitle:@"R" forState:UIControlStateNormal];
+    rightArrow.frame = CGRectMake(leftWidth, 0, FTCalendarHeaderLeftArrowWidth, FTCalendarHeaderHalfHeight);
     rightArrow.btnBlock = block;
     rightArrow.tag = tag + 1;
     [rightArrow setImage:[UIImage imageNamed:FTResourceRightArrowNormal] forState:UIControlStateNormal];

@@ -33,7 +33,7 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
     NSURLSession *_session;
     
     NSMutableData *mainData;
-    FTBDImageDownloadBlock block;
+//    FTBDImageDownloadBlock block;
 }
 
 @end
@@ -88,14 +88,12 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
     NSURL *url = [NSURL URLWithString:_urlCharacter];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0];
-    NSLog(@"FTBDNewsFetcher->requestBDNewsImage->referrer before: %@", [request valueForHTTPHeaderField:@"referer"]);
     [request setValue:FTBDNewsHttpReferrerContent forHTTPHeaderField:@"referer"];
-    NSLog(@"FTBDNewsFetcher->requestBDNewsImage->referrer after: %@", [request valueForHTTPHeaderField:@"referer"]);
 
     NSURLSessionDataTask *dataTask = [_session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if(response != nil) {
-            NSLog(@"FTBDNewsFetcher->requestBDNewsImage->length = %lld, name = %@", response.expectedContentLength, response.suggestedFilename);
-        }
+//        if(response != nil) {
+//            NSLog(@"FTBDNewsFetcher->requestBDNewsImage->length = %lld, name = %@", response.expectedContentLength, response.suggestedFilename);
+//        }
         if(data == nil) {
             NSLog(@"FTBDNewsFetcher->requestBDNewsImage->加载图片时异常，错误原因：data为空");
             return;
@@ -105,7 +103,7 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
         }
         _block(data);
     }];
-    block = _block;
+//    block = _block;
     [dataTask resume];
 }
 
@@ -121,33 +119,33 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
 }
 
 //任务收到响应
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler
-{
-    long long expLength = response.expectedContentLength;
-    NSLog(@"FTBDNewsFetcher->didReceiveResponse->length = %lld", expLength);
-    if(expLength == -1) {
-        completionHandler(NSURLSessionResponseCancel);
-    } else {
-        completionHandler(NSURLSessionResponseAllow);
-        mainData = [NSMutableData data];
-    }
-}
+//- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler
+//{
+//    long long expLength = response.expectedContentLength;
+//    NSLog(@"FTBDNewsFetcher->didReceiveResponse->length = %lld", expLength);
+//    if(expLength == -1) {
+//        completionHandler(NSURLSessionResponseCancel);
+//    } else {
+//        completionHandler(NSURLSessionResponseAllow);
+//        mainData = [NSMutableData data];
+//    }
+//}
 
 //收到数据的回调方法，多次执行
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
-{
-    [mainData appendData:data];
-    NSLog(@"data length = %ld", data.length);
-}
+//- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
+//{
+//    [mainData appendData:data];
+//    NSLog(@"data length = %ld", data.length);
+//}
 
 #pragma mark - NSURLSessionTaskDelegate
 
 //任务完成
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
-{
-    [_session finishTasksAndInvalidate];
-    block(mainData);
-}
+//- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+//{
+//    [_session finishTasksAndInvalidate];
+//    block(mainData);
+//}
 
 #pragma mark - test
 

@@ -13,6 +13,6 @@
 /**
  * 设置网页URL
  */
-- (void)setupURL:(NSString *)_url;
+- (void)setupURL:(NSString *)_url title:(NSString *)title;
 
 @end

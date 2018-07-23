@@ -27,8 +27,18 @@
 - (void)updateButtonStyleToSelected;
 
 /**
+ * 更新button样式为备份的样式
+ */
+- (void)updateButtonStyleToBackup;
+
+/**
  * 更新button样式为默认样式
  */
-- (void)updateButtonStyleToOriginal;
+- (void)updateButtonStyleToDefault;
+
+/**
+ * 更新button样式为当天日期样式
+ */
+- (void)updateButtonStyleToToday;
 
 @end

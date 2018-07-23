@@ -16,7 +16,7 @@
 @protocol FTBDNewsDelegate <NSObject>
 
 @required
-- (void)notifyData:(NSArray *)news;
+- (void)notifyData:(NSArray *)news keyword:(NSString *)keyword;
 
 @optional
 - (void)notifyImageDownload:(NSInteger)cellId;
@@ -41,6 +41,11 @@
 - (void)pullBaiduNews:(NSString *)keyword date:(NSDate *)date;
 
 /**
+ * 获取缓存的新闻数据
+ */
+- (void)getBaiduNews:(NSString *)keyword date:(NSDate *)date;
+
+/**
  * 加载新闻对应的图片
  */
 - (void)pullNewsImage:(FTBDNewsData *)newsData cellId:(NSInteger)cellId;
@@ -58,7 +63,7 @@
 /**
  * 通过keyword获取新闻data
  */
-- (FTBDNewsData *)getNewsDataFromKeyword:(NSString *)kw index:(NSUInteger *)index;
+- (FTBDNewsData *)getNewsDataFromKeyword:(NSString *)kw index:(NSUInteger)index;
 
 
 

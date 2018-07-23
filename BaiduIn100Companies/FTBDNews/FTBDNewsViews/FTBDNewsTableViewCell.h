@@ -10,6 +10,6 @@
 
 @interface FTBDNewsTableViewCell : UITableViewCell
 
-- (void)updateImageView:(UIImage *)image title:(NSString *)title time:(NSString *)time frame:(CGRect)frame;
+- (void)updateImageView:(UIImage *)image title:(NSString *)title time:(NSString *)time frame:(CGRect)frame readed:(BOOL)readed;
 
 @end

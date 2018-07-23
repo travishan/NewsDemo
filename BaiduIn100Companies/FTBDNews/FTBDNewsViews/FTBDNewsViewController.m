@@ -47,6 +47,7 @@ FTCalendarDelegate>
     NSArray *_currentNews;
     
     BOOL _isFilterDate;//是否筛选日期
+    NSInteger _recursion;//用于记录请求数据和数据通知
 }
 
 //UI
@@ -56,6 +57,7 @@ FTCalendarDelegate>
 @property (nonatomic, strong) UIButton *dateFilterButton;//开启时间过滤后的Button，显示过滤的时间
 @property (nonatomic, strong) UIButton *dateFilterArrowButton;//开始时间过滤后的button，显示箭头
 @property (nonatomic, strong) FTCalendarView *calendarView;
+@property (nonatomic, strong) UIActivityIndicatorView *indicatorView;
 
 @property (nonatomic, strong) UILabel *noNewsMessageLabel;
 //Data
@@ -74,6 +76,8 @@ FTCalendarDelegate>
     [self initViews];
     
 //    [_newsManager testImageDownload];//测试API图片缓存代码
+    
+    [self.newsManager requireNews:_currentKeyword date:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -118,7 +122,11 @@ FTCalendarDelegate>
     __weak FTBDNewsViewController *weakSelf = self;
     placeholderButton.btnBlock = ^(UIButton *btn) {
         //弹出日历View
-        [weakSelf showCalendar];
+        if(weakSelf.calendarView.hidden) {
+            [weakSelf showCalendar];
+        } else {
+            [weakSelf hiddenCalendar];
+        }
     };
     [dateFilterView addSubview:placeholderButton];
     
@@ -161,6 +169,13 @@ FTCalendarDelegate>
     self.noNewsMessageLabel.text = FTBDNoNewsMessage;
     self.noNewsMessageLabel.hidden = YES;
     [self.view addSubview:self.noNewsMessageLabel];
+    
+    //菊花
+    self.indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    self.indicatorView.color = [UIColor grayColor];
+    self.indicatorView.center = CGPointMake(_mainWidth / 2, _mainHeight / 2);
+    [self.view addSubview:self.indicatorView];
+    
 }
 
 - (void)initProperty
@@ -174,6 +189,7 @@ FTCalendarDelegate>
     
     _currentKeyword = @"富途";
     _isFilterDate = NO;//是否开启了日期筛选
+    _recursion = 0;
 }
 
 - (void)initDateFilterView
@@ -184,10 +200,14 @@ FTCalendarDelegate>
 #pragma mark - private method
 
 //调用NewsManager方法异步拉取新闻，通过协议方法notifyData接收返回消息
+//cache表示是否从本地拉取
 - (void)searchNews:(NSString *)keyword date:(NSDate *)date
 {
     if([keyword isEqualToString:@""]) {
         return;
+    }
+    if(_recursion > 0) {
+        [_newsManager getBaiduNews:keyword date:date];
     }
     NSLog(@"FTBDNewsViewController->searchNews: 准备拉取新闻，keyword: %@", keyword);
     [_newsManager pullBaiduNews:keyword date:date];
@@ -224,7 +244,15 @@ FTCalendarDelegate>
     //但是应该隐藏日历
     [self hiddenCalendar];
     [self.newsTableView setContentOffset:CGPointZero animated:YES];
+    //启动菊花
+    [self.indicatorView startAnimating];
     
+    NSString *newKeyword = self.searchTextField.text;
+
+    //如果和当前显示的keyword不一样，则先显示缓存数据
+    if(![_currentKeyword isEqualToString:newKeyword]) {
+        _recursion++;
+    }
     _currentKeyword = self.searchTextField.text;
     NSLog(@"FTBDNewsViewController->refreshKeywordAndNews: 输入的搜索关键字 = %@", _currentKeyword);
     [self searchNews:_currentKeyword date:self.selectedDate];
@@ -240,12 +268,6 @@ FTCalendarDelegate>
 //刷新新闻按钮响应事件
 - (void)refreshNewsAction:(UIBarButtonItem *)sender
 {
-    //如果键盘是first responder，则resign，之后会自动调用刷新方法
-//    if([self.searchTextField isFirstResponder]) {
-//        [self hideKeyboard];
-//    } else {//如果键盘不是first respnder，则直接调用刷新方法
-//        [self refreshKeywordAndNews];
-//    }
     [self hideKeyboard];
     [self refreshKeywordAndNews];
 }
@@ -295,12 +317,12 @@ FTCalendarDelegate>
     if(![data.imageUrls isEqual:[NSNull null]]) {
         image = [self.newsManager imageForId:data.newsId];
         if(image == nil) {
-            NSLog(@"FTBDNewsViewController->cellForRowAtIndexPath->RequestImage: 请求图片, imageUrls: %@", [data.imageUrls firstObject]);
+//            NSLog(@"FTBDNewsViewController->cellForRowAtIndexPath->RequestImage: 请求图片, imageUrls: %@", [data.imageUrls firstObject]);
             [self.newsManager pullNewsImage:data cellId:index];
         }
     }
     
-    [cell updateImageView:image title:data.title time:data.timeStr frame:CGRectMake(0, index * FTBDTabelViewCellHeight, CGRectGetWidth([UIScreen mainScreen].bounds), FTBDTabelViewCellHeight)];
+    [cell updateImageView:image title:data.title time:data.timeStr frame:CGRectMake(0, index * FTBDTabelViewCellHeight, CGRectGetWidth([UIScreen mainScreen].bounds), FTBDTabelViewCellHeight) readed:data.readed];
     
     return cell;
 }
@@ -318,6 +340,7 @@ FTCalendarDelegate>
 //点击UITableView row
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self.searchTextField resignFirstResponder];
     NSInteger index = indexPath.row;
     if(index < 0) {
         NSLog(@"FTBDNewsViewController->didSelectRowAtIndexPath->点击了第%ld行，行数竟然是负数？", indexPath.row);
@@ -328,11 +351,20 @@ FTCalendarDelegate>
         NSLog(@"FTBDNewsViewController->didSelectRowAtIndexPath->data为空");
         return;
     }
-    NSLog(@"FTBDNewsViewController->didSelectRowAtIndexPath->data ImageURls：%@", data.imageUrls);
+//    NSLog(@"FTBDNewsViewController->didSelectRowAtIndexPath->data ImageURls：%@", data.imageUrls);
+    //设置查看后更改row背景颜色
+    data.readed = YES;
+    [self.newsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    
     NSString *url = data.url;
     FTBDNewsDetailsController *controller = [[FTBDNewsDetailsController alloc] init];
-    [controller setupURL:url];
+    [controller setupURL:url title:data.posterScreenName];
     [self.navigationController pushViewController:controller animated:YES];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self.searchTextField resignFirstResponder];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -353,12 +385,24 @@ FTCalendarDelegate>
 #pragma mark - FTBDNewsDelegate
 
 //通知新闻拉取结果
-- (void)notifyData:(NSArray *)news
+- (void)notifyData:(NSArray *)news keyword:(NSString *)keyword
 {
-
+    if(![keyword isEqualToString:_currentKeyword]) {
+        NSLog(@"FTBDNewsViewController->notifyData->keyword不匹配，不显示通知的新闻, 当前keyword：%@， 传入的keyword：%@", _currentKeyword, keyword);
+        return;
+    }
+    //获取当前textField的
     _currentNews = news;
     __weak FTBDNewsViewController *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        //停止菊花
+        if(strongSelf->_recursion > 0) {
+            strongSelf->_recursion--;
+        } else if(strongSelf->_recursion == 0) {
+            [weakSelf.indicatorView stopAnimating];
+        }
+        
         if(news == nil || news.count == 0) {
             [weakSelf.view bringSubviewToFront:self.noNewsMessageLabel];
             weakSelf.noNewsMessageLabel.hidden = NO;

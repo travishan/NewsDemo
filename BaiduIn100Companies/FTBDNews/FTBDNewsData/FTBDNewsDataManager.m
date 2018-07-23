@@ -11,9 +11,9 @@
 #import "FTBDNewsFetcher.h"
 #import "FTBDNewsData.h"
 #import "FTCalendarHelper.h"
+#import "FTBDNewsArchiver.h"
 
-
-static const char *FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQueueName";
+static const char * const FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQueueName";
 
 @interface FTBDNewsDataManager ()
 {
@@ -22,24 +22,44 @@ static const char *FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQueueNam
 }
 
 @property (nonatomic, strong) FTBDNewsFetcher *fetcher;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, FTBDNews *> *newsDict;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, UIImage *> *imageDict;
+@property (nonatomic, strong) FTBDNewsArchiver *archiver;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, FTBDNews *> *newsDict;//每一个keyword对应一个图片
+@property (nonatomic, strong) NSMutableDictionary<NSString *, UIImage *> *imageDict;//每一个newsId对应一个图片
 
 @end
 
 @implementation FTBDNewsDataManager
 
++ (void)initialize
+{
+    if (self == [FTBDNewsDataManager class]) {
+        
+        [FTBDNewsDataManager sharedInstance];
+    }
+}
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
         _fetcher = [[FTBDNewsFetcher alloc] init];
-        _newsDict = [[NSMutableDictionary alloc] initWithCapacity:5];
-        _imageDict = [[NSMutableDictionary alloc] initWithCapacity:5];
+        _archiver = [[FTBDNewsArchiver alloc] init];
         _serialNotifyQueue = dispatch_queue_create(FBBDNewsSerialNotifyQueueName, DISPATCH_QUEUE_SERIAL);
+        //读取数据
+        [self initData];
+        
     }
     return self;
+}
+
+- (void)initData
+{
+    _newsDict = [[NSMutableDictionary alloc] initWithCapacity:5];
+    _imageDict = [[NSMutableDictionary alloc] initWithCapacity:5];
+    __weak FTBDNewsDataManager *weakSelf = self;
+    dispatch_async(_serialNotifyQueue, ^{
+        [weakSelf.archiver readNews:weakSelf.newsDict];
+    });
 }
 
 #pragma mark - Pull News
@@ -56,12 +76,33 @@ static const char *FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQueueNam
             return;
         }
         [weakSelf.newsDict setObject:res forKey:keyword];
+        //存储数据到本地
+        if(![self.archiver saveData:keyword news:res]) {
+            NSLog(@"FTBDNewsDataManager->pullBaiduNews:->保存数据到本地失败，keyword：%@", keyword);
+        }
         if(date == nil) {
-            [weakSelf notifyToDelegate:res.data];
+            [weakSelf notifyToDelegate:res.data keyword:keyword];
         } else {
             [weakSelf requireNews:keyword date:date];
         }
     }];
+}
+
+/**
+ * 获取缓存的新闻数据
+ */
+- (void)getBaiduNews:(NSString *)keyword date:(NSDate *)date
+{
+    NSLog(@"FTBDNewsDataManager->getBaiduNews->从缓存获取数据");
+    FTBDNews *news = [_newsDict objectForKey:keyword];
+    if(news == nil) {
+        return;
+    }
+    if(date == nil) {
+        [self notifyToDelegate:news.data keyword:keyword];
+    } else {
+        [self requireNews:keyword date:date];
+    }
 }
 
 - (void)pullNewsImage:(FTBDNewsData *)newsData cellId:(NSInteger)cellId
@@ -111,7 +152,7 @@ static const char *FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQueueNam
                 }
             }
             NSLog(@"FTBDNewsDataManager->requiresNews->block(serialQueue): data count:%ld", arr.count);
-            [weakSelf notifyToDelegate:arr];
+            [weakSelf notifyToDelegate:arr keyword:keyword];
         });
         
     }
@@ -119,13 +160,13 @@ static const char *FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQueueNam
 
 #pragma mark - notify
 
-- (void)notifyToDelegate:(NSArray *)dataArr
+- (void)notifyToDelegate:(NSArray *)dataArr keyword:(NSString *)kw
 {
     __weak FTBDNewsDataManager *weakSelf = self;
     dispatch_async(_serialNotifyQueue, ^{
-        if([weakSelf.delegate respondsToSelector:@selector(notifyData:)]) {
+        if([weakSelf.delegate respondsToSelector:@selector(notifyData:keyword:)]) {
             NSLog(@"FTBDNewsDataManager->notifyToDelegate: 通知delegate数据更新，data数量: %ld", dataArr.count);
-            [weakSelf.delegate notifyData:dataArr];
+            [weakSelf.delegate notifyData:dataArr keyword:kw];
         }
     });
 
@@ -138,7 +179,7 @@ static const char *FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQueueNam
         NSLog(@"FTBDNewsDataManager->notifyWithAllData: 字典中没有keyword对应的数据，keyword：%@", keyword);
         return;
     }
-    [self notifyToDelegate:res.data];
+    [self notifyToDelegate:res.data keyword:keyword];
 }
 
 #pragma mark - Class Method
@@ -191,7 +232,7 @@ static const char *FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQueueNam
     return [self.imageDict objectForKey:newsId];
 }
 
-- (FTBDNewsData *)getNewsDataFromKeyword:(NSString *)kw index:(NSUInteger *)index
+- (FTBDNewsData *)getNewsDataFromKeyword:(NSString *)kw index:(NSUInteger)index
 {
     FTBDNews *news = [_newsDict objectForKey:kw];
     if(news == nil || news.data == nil || news.data.count == 0) {

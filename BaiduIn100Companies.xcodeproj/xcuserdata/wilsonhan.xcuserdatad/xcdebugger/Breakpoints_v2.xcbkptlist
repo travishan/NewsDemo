@@ -38,59 +38,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsViews/FTBDNewsTableViewCell.m"
-            timestampString = "553953825.568984"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
-            landmarkName = "-pressNews:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsFetcher/FTBDNewsFetcher.m"
-            timestampString = "553953825.5699511"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
-            landmarkName = "-URLSession:dataTask:didReceiveResponse:completionHandler:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsFetcher/FTBDNewsFetcher.m"
-            timestampString = "553953825.570291"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
-            landmarkName = "-URLSession:dataTask:didReceiveData:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsFetcher/FTBDNewsDataManager.m"
-            timestampString = "553953825.5710779"
+            timestampString = "554022217.623271"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "241"
@@ -105,24 +57,8 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsFetcher/FTBDNewsFetcher.m"
-            timestampString = "553953825.572383"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
-            landmarkName = "-URLSession:task:didCompleteWithError:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsFetcher/FTBDNewsDataManager.m"
-            timestampString = "553953825.572729"
+            timestampString = "554022217.624395"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "246"
@@ -138,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BaiduIn100Companies/FTBDNews/FTCalendar/FTCalendarHeaderCell.m"
-            timestampString = "553953825.575009"
+            timestampString = "554043027.35203"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "199"
-            endingLineNumber = "199"
+            startingLineNumber = "200"
+            endingLineNumber = "200"
             landmarkName = "-updateView:"
             landmarkType = "7">
          </BreakpointContent>
@@ -153,13 +89,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsViews/FTBDNewsViewController.m"
-            timestampString = "553953825.575734"
+            filePath = "BaiduIn100Companies/FTBDNews/FTCalendar/FTCalendarOneDayCell.m"
+            timestampString = "554043027.352144"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "343"
-            endingLineNumber = "343"
-            landmarkName = "-textFieldShouldReturn:"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "-initUI:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -169,13 +105,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsFetcher/FTBDNewsFetcher.m"
-            timestampString = "553953825.575911"
+            filePath = "BaiduIn100Companies/FTBDNews/FTCalendar/FTCalendarView.m"
+            timestampString = "554043027.352217"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
-            landmarkName = "-requestBDNewsImage:block:"
+            startingLineNumber = "295"
+            endingLineNumber = "295"
+            landmarkName = "-collectionView:cellForMainSection:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -185,29 +121,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsFetcher/FTBDNewsDataManager.m"
-            timestampString = "553953825.575989"
+            filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsData/FTBDNewsArchiver.m"
+            timestampString = "554043027.352273"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "90"
-            endingLineNumber = "90"
-            landmarkName = "-pullNewsImage:cellId:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsFetcher/FTBDNewsDataManager.m"
-            timestampString = "553953825.576139"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
-            landmarkName = "-pullNewsImage:cellId:"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "-saveData:news:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -218,44 +138,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsViews/FTBDNewsViewController.m"
-            timestampString = "553953825.576251"
+            timestampString = "554043027.352758"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "285"
-            endingLineNumber = "285"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsFetcher/FTBDNewsDataManager.m"
-            timestampString = "553953825.576352"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
-            landmarkName = "-pullNewsImage:cellId:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsViews/FTBDNewsViewController.m"
-            timestampString = "553953825.576455"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "331"
-            endingLineNumber = "331"
-            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            startingLineNumber = "406"
+            endingLineNumber = "406"
+            landmarkName = "-notifyData:keyword:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -48,9 +48,10 @@
     _isIndicating = NO;
 }
 
-- (void)setupURL:(NSString *)_url
+- (void)setupURL:(NSString *)_url title:(NSString *)title
 {
     self.webUrl = _url;
+    self.navigationItem.title = title;
 }
 
 

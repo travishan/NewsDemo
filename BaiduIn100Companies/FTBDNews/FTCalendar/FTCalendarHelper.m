@@ -46,8 +46,7 @@ static NSCalendar *sFTCalendar;
         return -1;
     }
     
-    NSDateComponents *comps = [[NSDateComponents alloc] init];
-    comps = [sFTCalendar components:NSCalendarUnitWeekday fromDate:date];
+    NSDateComponents *comps = [sFTCalendar components:NSCalendarUnitWeekday fromDate:date];
     NSInteger index = comps.weekday;
     return index;
 }

@@ -31,10 +31,15 @@
         [btn setTitle:[weekNameArr objectAtIndex:i] forState:UIControlStateNormal];
         btn.frame = CGRectMake(i * btnWidth, 0, btnWidth, btnHeight);
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-//        [btn.layer setBorderWidth:1.0];
+        btn.tag = 99+i;
         [self addSubview:btn];
     }
+    UIButton *sundayBtn = [self viewWithTag:99];
+    [sundayBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
 
+    UIButton *saturdayBtn = [self viewWithTag:99+6];
+    [saturdayBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    
     UILabel *underLine = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMinY(frame) - 20, CGRectGetWidth(frame), 1)];
     underLine.backgroundColor = [UIColor grayColor];
     [self addSubview:underLine];

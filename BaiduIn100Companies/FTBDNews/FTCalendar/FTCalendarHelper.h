@@ -18,6 +18,7 @@
 
 /**
  * 获取第一天是周几
+ * 1是周天，7是周六
  */
 + (NSInteger)dayIndexOfWeek:(NSDate *)date;
 + (NSInteger)dayIndexOfWeek;

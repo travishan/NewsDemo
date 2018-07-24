@@ -158,6 +158,14 @@ static const char * const FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQ
     }
 }
 
+/**
+ * 检查本地是否有数据
+ */
+- (BOOL)checkLocal:(NSString *)keyword
+{
+    return ([_newsDict objectForKey:keyword] == nil) ? NO : YES;
+}
+
 #pragma mark - notify
 
 - (void)notifyToDelegate:(NSArray *)dataArr keyword:(NSString *)kw

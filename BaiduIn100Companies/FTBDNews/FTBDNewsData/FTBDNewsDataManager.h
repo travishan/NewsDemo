@@ -65,7 +65,10 @@
  */
 - (FTBDNewsData *)getNewsDataFromKeyword:(NSString *)kw index:(NSUInteger)index;
 
-
+/**
+ * 检查本地是否有数据
+ */
+- (BOOL)checkLocal:(NSString *)keyword;
 
 
 //test

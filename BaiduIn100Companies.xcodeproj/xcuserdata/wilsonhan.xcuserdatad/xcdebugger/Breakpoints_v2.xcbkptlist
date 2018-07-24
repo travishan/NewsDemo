@@ -74,7 +74,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BaiduIn100Companies/FTBDNews/FTCalendar/FTCalendarHeaderCell.m"
-            timestampString = "554043027.35203"
+            timestampString = "554044018.040386"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "200"
@@ -90,7 +90,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BaiduIn100Companies/FTBDNews/FTCalendar/FTCalendarOneDayCell.m"
-            timestampString = "554043027.352144"
+            timestampString = "554095600.2068321"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "44"
@@ -105,24 +105,8 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BaiduIn100Companies/FTBDNews/FTCalendar/FTCalendarView.m"
-            timestampString = "554043027.352217"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "295"
-            endingLineNumber = "295"
-            landmarkName = "-collectionView:cellForMainSection:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsData/FTBDNewsArchiver.m"
-            timestampString = "554043027.352273"
+            timestampString = "554044018.040755"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "58"
@@ -138,12 +122,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsViews/FTBDNewsViewController.m"
-            timestampString = "554043027.352758"
+            timestampString = "554093550.817394"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "406"
-            endingLineNumber = "406"
+            startingLineNumber = "400"
+            endingLineNumber = "400"
             landmarkName = "-notifyData:keyword:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BaiduIn100Companies/FTBDNews/FTCalendar/FTCalendarView.m"
+            timestampString = "554095600.206928"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "351"
+            endingLineNumber = "351"
+            landmarkName = "-collectionView:cellForMainSection:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BaiduIn100Companies/FTBDNews/FTCalendar/FTCalendarHelper.m"
+            timestampString = "554095600.206982"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "+dayIndexOfWeek:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

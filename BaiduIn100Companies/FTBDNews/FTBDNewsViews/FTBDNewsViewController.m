@@ -250,7 +250,7 @@ FTCalendarDelegate>
     NSString *newKeyword = self.searchTextField.text;
 
     //如果和当前显示的keyword不一样，则先显示缓存数据
-    if(![_currentKeyword isEqualToString:newKeyword]) {
+    if(![_currentKeyword isEqualToString:newKeyword] && [_newsManager checkLocal:newKeyword]) {
         _recursion++;
     }
     _currentKeyword = self.searchTextField.text;

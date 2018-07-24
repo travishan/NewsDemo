@@ -28,6 +28,18 @@ typedef NS_ENUM(NSInteger, FTCalendarSectionType) {
     FTCalendarMainSection
 };
 
+/**
+ * 当前日期选择的状态
+ * 1. 还没开始选择日期
+ * 2. 已经选择了from日期
+ * 3. 已经选择了To日期
+ */
+typedef NS_ENUM(NSInteger, FTCalendarDateSelectedStatusType) {
+    FTCalendarDateNotSelected = 0,
+    FTCalendarSelectedFromDate,
+    FTCalendarSelectedToDate
+};
+
 
 static NSString *sFTCalendarHeaderCellIdentifier = @"CalendarHeaderCellIdentifier";
 static NSString *sFTCalendarWeekTitleCellIdentifier = @"CalendarWeekTitleCell";
@@ -41,18 +53,23 @@ static const int sFTMainSectionEdge = 20;//20
 
 @property (nonatomic, strong) UICollectionView *calendarCollectionView;
 
-@property (nonatomic, strong) FTCalendarHelper *calendarHelper;
 @property (nonatomic, strong) NSDate *currentDate;//当前日期，主要用于标识当前的年和月
 @property (nonatomic, strong) NSDate *selectedDate;//选择的日期
 @property (nonatomic, strong) NSDate *firstDayOfDate;//本月第一天
 @property (nonatomic, assign) NSInteger weekIndexOfFirstDay;//第一天是周几
 @property (nonatomic, assign) NSInteger dayCountOfMonth;//本月天数
+
 @property (nonatomic, assign) NSInteger mainSectionCellCount;//日期区Cell个数，可能35个也可能42个
 @property (nonatomic, assign) CGFloat mainSectionCellWidth;//日期区Cell宽度
 @property (nonatomic, assign) CGFloat mainSectionCellHeight;//日期区Cell高度
 
-//记录上一个选中的日期Cell
+//记录选中日期相关属性
+@property (nonatomic, strong) NSDate *selectedFromDate;//日期区间：from
+@property (nonatomic, strong) NSDate *selectedToDate;//日期区间：to
+@property (nonatomic, strong) FTCalendarOneDayCell *selectedFromDateCell;//日期区间Cell：from
+@property (nonatomic, strong) FTCalendarOneDayCell *selectedToDateCell;//日期区间Cell：to
 @property (nonatomic, strong) FTCalendarOneDayCell *lastSelectedCell;//上一个选中的日期
+@property (nonatomic, assign) FTCalendarDateSelectedStatusType dateSelectedStatus;//当前日期选择的状态
 
 @end
 
@@ -110,6 +127,7 @@ static const int sFTMainSectionEdge = 20;//20
 
 - (void)initProperty
 {
+    self.dateSelectedStatus = FTCalendarDateNotSelected;
 }
 
 #pragma mark - update/calculate
@@ -189,11 +207,12 @@ static const int sFTMainSectionEdge = 20;//20
     return cell;
 }
 
+#pragma mark - UICollectionViewDelegate
+
 //每一个Item的大小
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger section = indexPath.section;
-//    NSInteger item = indexPath.row;
     CGSize size;
     if(section == FTCalendarMainSection) {
         size = CGSizeMake(self.mainSectionCellWidth, self.mainSectionCellHeight);
@@ -230,8 +249,6 @@ static const int sFTMainSectionEdge = 20;//20
     return 0;
 }
 
-#pragma mark - UICollectionViewDelegate
-
 //点击Item的响应
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -240,6 +257,31 @@ static const int sFTMainSectionEdge = 20;//20
         FTCalendarOneDayCell *cell = (FTCalendarOneDayCell *)[collectionView cellForItemAtIndexPath:indexPath];
         //更新selected日期
         if(cell.index != -1) {
+            //获取cell对应的日期
+            NSDate *dateForCell = [FTCalendarHelper dateFromIndex:cell.index date:self.currentDate];
+            if(dateForCell == nil) {
+                NSLog(@"FTCalendarView->didSelectItemAtIndexPath->从Cell获取的日期为空");
+                return;
+            }
+//            if(self.dateSelectedStatus == FTCalendarDateNotSelected) {//当前还没有选择from日期
+//                self.selectedFromDate = dateForCell;
+//                self.selectedFromDateCell = cell;
+//                self.dateSelectedStatus = FTCalendarSelectedFromDate;
+//                //如果是同一月才渲染
+//                if([FTCalendarHelper isSameMonth:self.selectedFromDate date2:self.currentDate]) {
+//                    [cell updateButtonStyleToSelected];
+//                }
+//            } else if(self.dateSelectedStatus == FTCalendarSelectedFromDate) {//当前选择了from日期，没有选择to日期
+//                self.selectedToDate = dateForCell;
+//                self.selectedToDateCell = cell;
+//                self.dateSelectedStatus = FTCalendarSelectedToDate;
+//                //如果是同一月才渲染
+//                if([FTCalendarHelper isSameMonth:self.selectedToDate date2:self.currentDate]) {
+//                    [cell updateButtonStyleToSelected];
+//                }
+//            } else {//当前已经选了from日期和to日期
+//
+//            }
             [self updateSelectedDateWithIndex:cell.index];
             //首先清空上次修改的button样式
             if(self.lastSelectedCell != nil) {
@@ -305,6 +347,11 @@ static const int sFTMainSectionEdge = 20;//20
         [cell updateCellWithDateIndex:index];
         [cell updateCellWithTitle:[NSString stringWithFormat:@"%d", index + 1] frame:CGRectMake(0, 0, self.mainSectionCellWidth, self.mainSectionCellHeight)];
         NSDate *indexDate = [FTCalendarHelper dateFromIndex:index date:self.currentDate];
+        //判断是否为周六周天
+        NSInteger weekday = [FTCalendarHelper dayIndexOfWeek:indexDate];
+        if(weekday == 1 || weekday == 7) {
+            [cell updateButtonStyleToWeekend];
+        }
         //判断当前cell是否为今天，是则修改button为今天的样式
         if([FTCalendarHelper isSameDay:indexDate date2:[NSDate date]]) {
             [cell updateButtonStyleToToday];

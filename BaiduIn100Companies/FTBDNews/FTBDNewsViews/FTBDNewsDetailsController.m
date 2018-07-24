@@ -79,7 +79,7 @@
         [self presentViewController:alert animated:YES completion:nil];
     }
     
-    NSLog(@"Fail to Load Web, reason: %@, code = %ld", error.localizedDescription, error.code);
+    NSLog(@"FTBDNewsDetailsController->startIndicator->加载网页失败，原因: %@, code = %ld", error.localizedDescription, error.code);
 }
 
 
@@ -88,7 +88,7 @@
 - (void)startIndicator
 {
     if(!_isIndicating) {
-        NSLog(@"开始转菊花");
+        NSLog(@"FTBDNewsDetailsController->startIndicator->开始转菊花");
         [self.indicatorView startAnimating];
         _isIndicating = YES;
     }
@@ -97,7 +97,7 @@
 - (void)stopIndicator
 {
     if(_isIndicating) {
-        NSLog(@"停止转菊花");
+        NSLog(@"FTBDNewsDetailsController->stopIndicator->停止转菊花");
         [self.indicatorView stopAnimating];
         _isIndicating = NO;
     }

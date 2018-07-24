@@ -104,6 +104,19 @@ static const CGFloat sFTCalendarOneDayButtonMargin = 8.0;
     
 }
 
+/**
+ * 更新button样式为周六周天
+ */
+- (void)updateButtonStyleToWeekend
+{
+    [self saveCurrentStyle];
+    
+    [self.dayBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+}
+
+
+#pragma mark - privat method
+
 //设置默认样式
 - (void)initDefaultStyle
 {

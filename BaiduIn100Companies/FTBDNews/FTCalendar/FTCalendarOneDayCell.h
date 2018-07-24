@@ -41,4 +41,9 @@
  */
 - (void)updateButtonStyleToToday;
 
+/**
+ * 更新button样式为周六周天
+ */
+- (void)updateButtonStyleToWeekend;
+
 @end

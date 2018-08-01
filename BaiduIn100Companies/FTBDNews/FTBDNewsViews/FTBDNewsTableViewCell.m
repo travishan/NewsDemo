@@ -63,8 +63,8 @@ static const CGFloat FTBDBottomLineWidth = 0.5f;
 
 - (void)layoutSubviews
 {
-    CGFloat width = CGRectGetWidth(self.frame);
-    CGFloat height = CGRectGetHeight(self.frame);
+    CGFloat width = CGRectGetWidth(self.bounds);
+    CGFloat height = CGRectGetHeight(self.bounds);
     CGFloat widthOffset = FTBDImageViewWidthMargin;//记录view横坐标的偏移量
     CGFloat labelWidth = 0;//计算label的宽度
 

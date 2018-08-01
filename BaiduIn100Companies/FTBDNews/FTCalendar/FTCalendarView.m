@@ -70,7 +70,7 @@ static const int sFTMainSectionEdge = 20;//20
 
 @implementation FTCalendarView
 
-#pragma mark - LifeCycle
+#pragma mark - Life Cycle
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -91,16 +91,23 @@ static const int sFTMainSectionEdge = 20;//20
     [super setHidden:hidden];
 }
 
+- (void)layoutSubviews
+{
+    self.calendarCollectionView.frame = self.bounds;
+    self.mainSectionCellWidth = (CGRectGetWidth(self.bounds) - sFTMainSectionEdge * 2) / 7;//减去mainsection两边边缘除以7
+}
+
 /*
  * 初始化Collection View
  */
 - (void)initCollectionView:(CGRect)frame {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     [layout setScrollDirection:UICollectionViewScrollDirectionVertical];
-    _calendarCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame)) collectionViewLayout:layout];
+    _calendarCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
     _calendarCollectionView.backgroundColor = [UIColor clearColor];
     _calendarCollectionView.delegate = self;
     _calendarCollectionView.dataSource = self;
+
     //注册Cell
     [_calendarCollectionView registerClass:[FTCalendarHeaderCell class] forCellWithReuseIdentifier:NSStringFromClass([FTCalendarHeaderCell class])];
     [_calendarCollectionView registerClass:[FTCalendarWeekTitleCell class] forCellWithReuseIdentifier:NSStringFromClass([FTCalendarWeekTitleCell class])];
@@ -147,7 +154,6 @@ static const int sFTMainSectionEdge = 20;//20
         self.mainSectionCellCount = 35;
         self.mainSectionCellHeight = kFTMainSectionHeight / 5;
     }
-    self.mainSectionCellWidth = (CGRectGetWidth(self.frame) - sFTMainSectionEdge * 2) / 7;//减去mainsection两边边缘除以7
 }
 
 - (void)updateDateWithYear:(NSInteger)yearStep month:(NSInteger)monthStep

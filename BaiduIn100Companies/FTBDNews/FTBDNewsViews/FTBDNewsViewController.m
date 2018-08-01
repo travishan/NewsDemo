@@ -51,12 +51,20 @@ FTCalendarDelegate>
 }
 
 //UI
+@property (strong, nonatomic) UIView *searchBackgroundView;
 @property (strong, nonatomic) UITextField *searchTextField;
-@property (strong, nonatomic) UITableView *newsTableView;
+//没有开启日期过滤的日期过滤view和按钮
+@property (strong, nonatomic) UIView *dateFilterView;
+@property (strong, nonatomic) FTCalendarButton *placeholderButton;
+//开启时间过滤后的View
 @property (strong, nonatomic) UIView *dateFilterAbovedView;//开启时间过滤后的View，显示过滤的时间labe和button
 @property (strong, nonatomic) UIButton *dateFilterButton;//开启时间过滤后的Button，显示过滤的时间
 @property (strong, nonatomic) UIButton *dateFilterArrowButton;//开始时间过滤后的button，显示箭头
+
 @property (strong, nonatomic) FTCalendarView *calendarView;
+
+@property (strong, nonatomic) UITableView *newsTableView;
+
 @property (strong, nonatomic) UIActivityIndicatorView *indicatorView;
 
 @property (strong, nonatomic) UILabel *noNewsMessageLabel;
@@ -68,6 +76,8 @@ FTCalendarDelegate>
 @end
 
 @implementation FTBDNewsViewController
+
+#pragma mark - life cycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -81,6 +91,32 @@ FTCalendarDelegate>
 }
 
 
+- (void)viewWillLayoutSubviews {
+    
+    CGFloat width = CGRectGetWidth(self.view.bounds);
+    CGFloat height = CGRectGetHeight(self.view.bounds);
+    //搜索框与日期筛选平分屏幕的宽度
+    CGFloat searchTextFieldWidth = width / 2;
+    //搜索框
+    self.searchBackgroundView.frame = CGRectMake(0, _mainViewYPosition, searchTextFieldWidth, FTBDSearchTextFieldHeight);
+    self.searchTextField.frame = CGRectMake(FTBDSearchTextFieldLeftMargin, 0, searchTextFieldWidth - FTBDSearchTextFieldLeftMargin, FTBDSearchTextFieldHeight);
+    //日期筛选框
+    self.dateFilterView.frame = CGRectMake(searchTextFieldWidth, _mainViewYPosition, searchTextFieldWidth, FTBDSearchTextFieldHeight);
+    self.placeholderButton.frame = CGRectMake(0, 0, searchTextFieldWidth, FTBDSearchTextFieldHeight);
+    //开启日期筛选后的日期筛选框
+    self.dateFilterAbovedView.frame = CGRectMake(searchTextFieldWidth, _mainViewYPosition, searchTextFieldWidth, FTBDSearchTextFieldHeight);
+    self.dateFilterButton.frame = CGRectMake(0, 0, searchTextFieldWidth - FTBDDateFilterBottomArrowWidth, FTBDSearchTextFieldHeight);
+    self.dateFilterArrowButton.frame = CGRectMake(searchTextFieldWidth - FTBDDateFilterBottomArrowWidth, 0, FTBDDateFilterBottomArrowWidth, FTBDSearchTextFieldHeight);
+    //calendar view
+    self.calendarView.frame = CGRectMake(0, height - FTBDCalenderViewHeight, width, FTBDCalenderViewHeight);
+    //table view
+    CGFloat tableHeightOffset = _mainViewYPosition + FTBDSearchTextFieldHeight;
+    self.newsTableView.frame = CGRectMake(0, tableHeightOffset, width, height - tableHeightOffset);
+    
+    self.noNewsMessageLabel.frame = CGRectMake((width - FTBDNoNewsLabelWidth) / 2, (height - FTBDNoNewsLabelHeight) / 2, FTBDNoNewsLabelWidth, FTBDNoNewsLabelHeight);
+    self.indicatorView.center = CGPointMake(width / 2, height / 2);
+}
+
 #pragma mark - Initial
 
 - (void)initViews
@@ -92,54 +128,47 @@ FTCalendarDelegate>
     UIBarButtonItem *refreshBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshNewsAction:)];
     self.navigationItem.rightBarButtonItem = refreshBtn;
     
-    //搜索框与日期筛选平分屏幕的宽度
-    CGFloat searchTextFieldWidth = _mainWidth / 2;
-    
     //搜索框 View+UITextField
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, _mainViewYPosition, searchTextFieldWidth, FTBDSearchTextFieldHeight)];
-    view.layer.borderWidth = FTBDLayerBorderWidth;
-    view.backgroundColor = [UIColor colorWithRed:211/255.0 green:211/255.0 blue:211/255.0 alpha:1];
-    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(FTBDSearchTextFieldLeftMargin, 0, view.frame.size.width - FTBDSearchTextFieldLeftMargin, FTBDSearchTextFieldHeight)];
+    self.searchBackgroundView = [[UIView alloc] init];
+    self.searchBackgroundView.layer.borderWidth = FTBDLayerBorderWidth;
+    self.searchBackgroundView.backgroundColor = [UIColor colorWithRed:211/255.0 green:211/255.0 blue:211/255.0 alpha:1];
+    
+    self.searchTextField = [[UITextField alloc] init];
     self.searchTextField.text = FTBDNewsSearchDefaultKey;
     self.searchTextField.placeholder = FTBDNewsSearchPlaceholder;
     self.searchTextField.delegate = self;
     [self.searchTextField setReturnKeyType:UIReturnKeyGoogle];
-    [view addSubview:self.searchTextField];
-    [self.view addSubview:view];
+    [self.searchBackgroundView addSubview:self.searchTextField];
+    [self.view addSubview:self.searchBackgroundView];
     
     //日期筛选View  与搜索框并排，宽度相同
-    UIView *dateFilterView = [[UIView alloc] initWithFrame:CGRectMake(searchTextFieldWidth, _mainViewYPosition, searchTextFieldWidth, FTBDSearchTextFieldHeight)];
-    dateFilterView.layer.borderWidth = FTBDLayerBorderWidth;
-    [self.view addSubview:dateFilterView];
+    self.dateFilterView = [[UIView alloc] init];
+    self.dateFilterView.layer.borderWidth = FTBDLayerBorderWidth;
+    [self.view addSubview:self.dateFilterView];
     //日期筛选框上的默认按钮，显示日期筛选
-    FTCalendarButton *placeholderButton = [FTCalendarButton buttonWithType:UIButtonTypeCustom];
-    placeholderButton.frame = CGRectMake(0, 0, searchTextFieldWidth, FTBDSearchTextFieldHeight);
-    [placeholderButton setTitle:FTBDNewsDateFilterStr forState:UIControlStateNormal];
-    __weak FTBDNewsViewController *weakSelf = self;
-    placeholderButton.btnBlock = ^(UIButton *btn) {
+    self.placeholderButton = [FTCalendarButton buttonWithType:UIButtonTypeCustom];
+    [self.placeholderButton setTitle:FTBDNewsDateFilterStr forState:UIControlStateNormal];
+    __weak typeof(self) weakSelf = self;
+    self.placeholderButton.btnBlock = ^(UIButton *btn) {
+        typeof(weakSelf) strongSelf = weakSelf;
         //弹出日历View
-        if (weakSelf.calendarView.hidden) {
-            [weakSelf showCalendar];
-        } else {
-            [weakSelf hiddenCalendar];
-        }
+        strongSelf.calendarView.hidden ? [strongSelf showCalendar] : [strongSelf hiddenCalendar];
     };
-    [dateFilterView addSubview:placeholderButton];
+    [self.dateFilterView addSubview:self.placeholderButton];
     
     //开启日期筛选之后显示的View
-    self.dateFilterAbovedView = [[UIView alloc] initWithFrame:CGRectMake(searchTextFieldWidth, _mainViewYPosition, searchTextFieldWidth, FTBDSearchTextFieldHeight)];
+    self.dateFilterAbovedView = [[UIView alloc] init];
     self.dateFilterAbovedView.backgroundColor = [UIColor whiteColor];
     self.dateFilterAbovedView.layer.borderWidth = FTBDLayerBorderWidth;
     
     //日期过滤按钮，用来显示当前选中的日期文本，响应点击事件，传递给dateFilterArrowButton
-    self.dateFilterButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, searchTextFieldWidth - FTBDDateFilterBottomArrowWidth, FTBDSearchTextFieldHeight)];
+    self.dateFilterButton = [[UIButton alloc] init];
     [self.dateFilterButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.dateFilterButton addTarget:self action:@selector(dateFilterBtnTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
     [self.dateFilterButton addTarget:self action:@selector(dateFilterBtnTouchDown:) forControlEvents:UIControlEventTouchDown];
     
     //日期过滤按钮，显示一个箭头，表明是展开日历还是隐藏日历
     self.dateFilterArrowButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.dateFilterArrowButton setFrame:CGRectMake(searchTextFieldWidth - FTBDDateFilterBottomArrowWidth, 0, FTBDDateFilterBottomArrowWidth, FTBDSearchTextFieldHeight)];
     [self.dateFilterArrowButton setImage:[UIImage imageNamed:FTResourceDownArrowNormal] forState:UIControlStateNormal];
     [self.dateFilterArrowButton setImage:[UIImage imageNamed:FTResourceDownArrowHighlight] forState:UIControlStateHighlighted];
     [self.dateFilterArrowButton addTarget:self action:@selector(dateFilterBtnTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
@@ -150,14 +179,13 @@ FTCalendarDelegate>
     self.dateFilterAbovedView.hidden = YES;
     
     //初始化Calendar View
-    self.calendarView = [[FTCalendarView alloc] initWithFrame:CGRectMake(0, _mainHeight - FTBDCalenderViewHeight, _mainWidth, FTBDCalenderViewHeight)];
+    self.calendarView = [[FTCalendarView alloc] init];
     self.calendarView.hidden = YES;
     self.calendarView.delegate = self;
     [self.view addSubview:self.calendarView];
     
     //初始化Table view
-    CGFloat tableHeightOffset = _mainViewYPosition + FTBDSearchTextFieldHeight;
-    self.newsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, tableHeightOffset, _mainWidth, _mainHeight - tableHeightOffset) style:UITableViewStylePlain];
+    self.newsTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.newsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.newsTableView.dataSource = self;
     self.newsTableView.delegate = self;
@@ -165,7 +193,7 @@ FTCalendarDelegate>
     [self.view addSubview:self.newsTableView];
     
     //当过滤日期后没有当天的新闻后，显示该label用于提示
-    self.noNewsMessageLabel = [[UILabel alloc] initWithFrame:CGRectMake((_mainWidth - FTBDNoNewsLabelWidth) / 2, (_mainHeight - FTBDNoNewsLabelHeight) / 2, FTBDNoNewsLabelWidth, FTBDNoNewsLabelHeight)];
+    self.noNewsMessageLabel = [[UILabel alloc] init];
     self.noNewsMessageLabel.textAlignment = NSTextAlignmentCenter;
     self.noNewsMessageLabel.text = FTBDNoNewsMessage;
     self.noNewsMessageLabel.hidden = YES;
@@ -174,10 +202,11 @@ FTCalendarDelegate>
     //菊花
     self.indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     self.indicatorView.color = [UIColor grayColor];
-    self.indicatorView.center = CGPointMake(_mainWidth / 2, _mainHeight / 2);
     [self.view addSubview:self.indicatorView];
     
 }
+
+
 
 - (void)initProperty
 {

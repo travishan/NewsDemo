@@ -15,7 +15,7 @@
 @interface FTCalendarOneDayCell : UICollectionViewCell
 
 //当前cell对应的日期index
-@property (nonatomic, assign) NSInteger index;
+@property (assign, nonatomic) NSInteger index;
 
 - (void)updateCellWithTitle:(NSString *)title frame:(CGRect)frame;
 

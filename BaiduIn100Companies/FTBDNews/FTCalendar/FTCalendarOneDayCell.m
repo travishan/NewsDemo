@@ -8,7 +8,7 @@
 
 #import "FTCalendarOneDayCell.h"
 
-static const CGFloat sFTCalendarOneDayButtonMargin = 8.0;
+static const CGFloat kFTCalendarOneDayButtonMargin = 8.0;
 
 @interface FTCalendarOneDayCell ()
 {
@@ -19,7 +19,7 @@ static const CGFloat sFTCalendarOneDayButtonMargin = 8.0;
     CGColorRef _oldBorderColor;
 }
 
-@property (nonatomic, strong) FTCalendarButton *dayBtn;
+@property (strong, nonatomic) FTCalendarButton *dayBtn;
 
 
 @end
@@ -54,7 +54,7 @@ static const CGFloat sFTCalendarOneDayButtonMargin = 8.0;
     [self.dayBtn setTitle:title forState:UIControlStateNormal];
     
     //button为圆形或正方形，计算button的坐标
-    CGFloat btnWidth = MIN(CGRectGetWidth(frame), CGRectGetHeight(frame)) - sFTCalendarOneDayButtonMargin;//cell的高宽不一致，获取最小值
+    CGFloat btnWidth = MIN(CGRectGetWidth(frame), CGRectGetHeight(frame)) - kFTCalendarOneDayButtonMargin;//cell的高宽不一致，获取最小值
     CGFloat marginLeft = (CGRectGetWidth(frame) - btnWidth) / 2;
     CGFloat marginUp = (CGRectGetHeight(frame) - btnWidth) / 2;
     

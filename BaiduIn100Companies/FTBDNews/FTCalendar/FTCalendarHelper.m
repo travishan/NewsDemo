@@ -26,7 +26,7 @@ static NSCalendar *sFTCalendar;
 //返回当月的天数
 + (NSInteger)dayCountOfMonth:(NSDate *)date
 {
-    if(!date) {
+    if (!date) {
         return -1;
     }
     
@@ -42,7 +42,7 @@ static NSCalendar *sFTCalendar;
 //返回该天是周几
 + (NSInteger)dayIndexOfWeek:(NSDate *)date
 {
-    if(!date) {
+    if (!date) {
         return -1;
     }
     
@@ -59,13 +59,13 @@ static NSCalendar *sFTCalendar;
 //获取该月的第一天
 + (NSDate *)firstDayOfMonth:(NSDate *)date
 {
-    if(!date) {
+    if (!date) {
         return nil;
     }
     
     NSDate *beginDate = nil;
     double interval = 0;
-    if(![sFTCalendar rangeOfUnit:NSCalendarUnitMonth
+    if (![sFTCalendar rangeOfUnit:NSCalendarUnitMonth
                          startDate:&beginDate
                           interval:&interval
                            forDate:date]) {
@@ -82,7 +82,7 @@ static NSCalendar *sFTCalendar;
 //返回时间字符串
 + (NSString *)stringOfDate:(NSDate *)date
 {
-    if(!date) {
+    if (!date) {
         return @"";
     }
     
@@ -150,7 +150,7 @@ static NSCalendar *sFTCalendar;
 //比较是否同一天
 + (BOOL)isSameDay:(NSDate *)date1 date2:(NSDate *)date2
 {
-    if(date1 == nil || date2 == nil) {
+    if (!date1 || !date2) {
         return NO;
     }
     NSDateComponents *c1 = [self components:date1];
@@ -161,7 +161,7 @@ static NSCalendar *sFTCalendar;
 //比较是否同一月
 + (BOOL)isSameMonth:(NSDate *)date1 date2:(NSDate *)date2
 {
-    if(date1 == nil || date2 == nil) {
+    if (!date1 || !date2) {
         return NO;
     }
     NSDateComponents *c1 = [FTCalendarHelper components:date1];

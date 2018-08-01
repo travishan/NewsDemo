@@ -16,15 +16,13 @@
 static const char * const FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQueueName";
 
 @interface FTBDNewsDataManager ()
-{
-    FTBDNewsFetcher *_fetcher;
-    dispatch_queue_t _serialNotifyQueue;
-}
 
-@property (nonatomic, strong) FTBDNewsFetcher *fetcher;
-@property (nonatomic, strong) FTBDNewsArchiver *archiver;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, FTBDNews *> *newsDict;//每一个keyword对应一个图片
-@property (nonatomic, strong) NSMutableDictionary<NSString *, UIImage *> *imageDict;//每一个newsId对应一个图片
+
+@property (strong, nonatomic) dispatch_queue_t serialNotifyQueue;
+@property (strong, nonatomic) FTBDNewsFetcher *fetcher;
+@property (strong, nonatomic) FTBDNewsArchiver *archiver;
+@property (strong, nonatomic) NSMutableDictionary<NSString *, FTBDNews *> *newsDict;//每一个keyword对应一个图片
+@property (strong, nonatomic) NSMutableDictionary<NSString *, UIImage *> *imageDict;//每一个newsId对应一个图片
 
 @end
 
@@ -56,9 +54,10 @@ static const char * const FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQ
 {
     _newsDict = [[NSMutableDictionary alloc] initWithCapacity:5];
     _imageDict = [[NSMutableDictionary alloc] initWithCapacity:5];
-    __weak FTBDNewsDataManager *weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     dispatch_async(_serialNotifyQueue, ^{
-        [weakSelf.archiver readNews:weakSelf.newsDict];
+        typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf.archiver readNews:strongSelf.newsDict];
     });
 }
 
@@ -66,24 +65,25 @@ static const char * const FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQ
 
 - (void)pullBaiduNews:(NSString *)keyword date:(NSDate *)date
 {
-    __weak FTBDNewsDataManager *weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     
     [_fetcher requestBDNews:keyword block:^(NSString *keyword, NSData *data) {
+        typeof(weakSelf) strongSelf = weakSelf;
         //获取数据，存储到字典中
         FTBDNews *res = [FTBDNewsDataManager analysisNews:keyword data:data];
-        if(res == nil) {
+        if (!res) {
             NSLog(@"FTBDNewsDataManager->pullBaiduNews: 数据解析为空。");
             return;
         }
-        [weakSelf.newsDict setObject:res forKey:keyword];
+        [strongSelf.newsDict setObject:res forKey:keyword];
         //存储数据到本地
-        if(![self.archiver saveData:keyword news:res]) {
+        if (![self.archiver saveData:keyword news:res]) {
             NSLog(@"FTBDNewsDataManager->pullBaiduNews:->保存数据到本地失败，keyword：%@", keyword);
         }
-        if(date == nil) {
-            [weakSelf notifyToDelegate:res.data keyword:keyword];
+        if (!date) {
+            [strongSelf notifyToDelegate:res.data keyword:keyword];
         } else {
-            [weakSelf requireNews:keyword date:date];
+            [strongSelf requireNews:keyword date:date];
         }
     }];
 }
@@ -91,14 +91,13 @@ static const char * const FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQ
 /**
  * 获取缓存的新闻数据
  */
-- (void)getBaiduNews:(NSString *)keyword date:(NSDate *)date
-{
+- (void)getBaiduNews:(NSString *)keyword date:(NSDate *)date {
     NSLog(@"FTBDNewsDataManager->getBaiduNews->从缓存获取数据");
     FTBDNews *news = [_newsDict objectForKey:keyword];
-    if(news == nil) {
+    if (news != nil) {
         return;
     }
-    if(date == nil) {
+    if (!date) {
         [self notifyToDelegate:news.data keyword:keyword];
     } else {
         [self requireNews:keyword date:date];
@@ -108,22 +107,22 @@ static const char * const FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQ
 - (void)pullNewsImage:(FTBDNewsData *)newsData cellId:(NSInteger)cellId
 {
     UIImage *image = [_imageDict objectForKey:newsData.newsId];
-    if(image == nil) {
-        if(newsData.imageUrls == nil || [newsData.imageUrls isEqual:[NSNull null]]) {
+    if (!image) {
+        if (!newsData.imageUrls || [newsData.imageUrls isEqual:[NSNull null]]) {
             return;
         }
         NSString *url = [newsData.imageUrls firstObject];
-        if(url == nil) {
+        if (!url) {
             return;
         }
         __weak FTBDNewsDataManager *weakSelf = self;
         FTBDImageDownloadBlock blk = ^(NSData *data) {
             UIImage *im = [UIImage imageWithData:data];
-            if(im == nil) {
+            if (!im) {
                 return;
             }
             [weakSelf.imageDict setObject:im forKey:newsData.newsId];
-            if([weakSelf.delegate respondsToSelector:@selector(notifyImageDownload:)]) {
+            if ([weakSelf.delegate respondsToSelector:@selector(notifyImageDownload:)]) {
                 [weakSelf.delegate notifyImageDownload:cellId];
             }
         };
@@ -137,17 +136,17 @@ static const char * const FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQ
 //根据传入的日期过滤出新闻
 - (void)requireNews:(NSString *)keyword date:(NSDate *)date
 {
-    if(date == nil) {
+    if (date == nil) {
         [self nofityWithAllData:keyword];
         return;
     }
     FTBDNews *news = [self.newsDict objectForKey:keyword];
-    if(news != nil) {
+    if (news != nil) {
         __weak FTBDNewsDataManager *weakSelf = self;
         dispatch_async(_serialNotifyQueue, ^{
             NSMutableArray *arr = [NSMutableArray arrayWithCapacity:news.data.count];
             for(FTBDNewsData *data in news.data) {
-                if([FTCalendarHelper isSameDay:data.publishDate date2:date]) {
+                if ([FTCalendarHelper isSameDay:data.publishDate date2:date]) {
                     [arr addObject:data];
                 }
             }
@@ -172,7 +171,7 @@ static const char * const FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQ
 {
     __weak FTBDNewsDataManager *weakSelf = self;
     dispatch_async(_serialNotifyQueue, ^{
-        if([weakSelf.delegate respondsToSelector:@selector(notifyData:keyword:)]) {
+        if ([weakSelf.delegate respondsToSelector:@selector(notifyData:keyword:)]) {
             NSLog(@"FTBDNewsDataManager->notifyToDelegate: 通知delegate数据更新，data数量: %ld", dataArr.count);
             [weakSelf.delegate notifyData:dataArr keyword:kw];
         }
@@ -183,7 +182,7 @@ static const char * const FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQ
 - (void)nofityWithAllData:(NSString *)keyword
 {
     FTBDNews *res = [_newsDict objectForKey:keyword];
-    if(res == nil) {
+    if (res == nil) {
         NSLog(@"FTBDNewsDataManager->notifyWithAllData: 字典中没有keyword对应的数据，keyword：%@", keyword);
         return;
     }
@@ -196,7 +195,7 @@ static const char * const FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQ
 {
     NSError *err;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&err];
-    if(dic == nil) {
+    if (dic == nil) {
         NSLog(@"JSON data解析出错, %@", err.localizedDescription);
     }
     return [FTBDNewsDataManager newsMaker:dic];
@@ -204,7 +203,7 @@ static const char * const FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQ
 
 + (FTBDNews *)newsMaker:(NSDictionary *)dic
 {
-    if(dic == nil) {
+    if (dic == nil) {
         return nil;
     }
     //data formatter
@@ -243,7 +242,7 @@ static const char * const FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQ
 - (FTBDNewsData *)getNewsDataFromKeyword:(NSString *)kw index:(NSUInteger)index
 {
     FTBDNews *news = [_newsDict objectForKey:kw];
-    if(news == nil || news.data == nil || news.data.count == 0) {
+    if (news == nil || news.data == nil || news.data.count == 0) {
         return nil;
     }
     FTBDNewsData *res = [news.data objectAtIndex:index];
@@ -258,7 +257,7 @@ static FTBDNewsDataManager *instance = nil;
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if(instance == nil) {
+        if (instance == nil) {
             instance = [[FTBDNewsDataManager alloc] init];
         }
     });
@@ -269,7 +268,7 @@ static FTBDNewsDataManager *instance = nil;
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if(instance == nil) {
+        if (instance == nil) {
             instance = [super allocWithZone:zone];
         }
     });

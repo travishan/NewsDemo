@@ -35,7 +35,7 @@ static const CGFloat FTBDBottomLineWidth = 0.5f;
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if(self) {
+    if (self) {
         [self initUI];
     }
     return self;
@@ -83,14 +83,14 @@ static const CGFloat FTBDBottomLineWidth = 0.5f;
 - (void)updateImageView:(UIImage *)image title:(NSString *)title time:(NSString *)time frame:(CGRect)frame readed:(BOOL)readed
 {
     [self setFrame:frame];
-    if(image == nil) {
+    if (!image) {
         _imageView.image = [UIImage imageNamed:@"LoadFail"];
     } else {
         _imageView.image = image;
     }
     _titleLabel.text = title;
     _timeLabel.text = time;
-    if(readed) {
+    if (readed) {
         self.backgroundColor = [UIColor colorWithRed:0.82 green:0.82 blue:0.82 alpha:1.0];
     } else {
         self.backgroundColor = [UIColor whiteColor];
@@ -101,7 +101,7 @@ static const CGFloat FTBDBottomLineWidth = 0.5f;
 
 - (void)pressNews:(UITapGestureRecognizer *)sender
 {
-    if(sender.state == UIGestureRecognizerStateEnded) {
+    if (sender.state == UIGestureRecognizerStateEnded) {
         NSLog(@"进入新闻页面, %@", sender.view);
     }
 }

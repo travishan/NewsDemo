@@ -10,7 +10,6 @@
 		040BA32520FDD3E40075B9EB /* FTBDNewsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 040BA32420FDD3E40075B9EB /* FTBDNewsViewController.m */; };
 		040BA32820FDDC200075B9EB /* FTBDNewsDetailsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 040BA32720FDDC200075B9EB /* FTBDNewsDetailsController.m */; };
 		044D8EDA20FD8D7C005FDE2F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 044D8ED920FD8D7C005FDE2F /* AppDelegate.m */; };
-		044D8EDD20FD8D7C005FDE2F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 044D8EDC20FD8D7C005FDE2F /* ViewController.m */; };
 		044D8EE220FD8D7D005FDE2F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 044D8EE120FD8D7D005FDE2F /* Assets.xcassets */; };
 		044D8EE520FD8D7D005FDE2F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 044D8EE320FD8D7D005FDE2F /* LaunchScreen.storyboard */; };
 		044D8EE820FD8D7D005FDE2F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 044D8EE720FD8D7D005FDE2F /* main.m */; };
@@ -35,8 +34,6 @@
 		044D8ED520FD8D7C005FDE2F /* BaiduIn100Companies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BaiduIn100Companies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		044D8ED820FD8D7C005FDE2F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		044D8ED920FD8D7C005FDE2F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		044D8EDB20FD8D7C005FDE2F /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		044D8EDC20FD8D7C005FDE2F /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		044D8EE120FD8D7D005FDE2F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		044D8EE420FD8D7D005FDE2F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		044D8EE620FD8D7D005FDE2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -123,8 +120,6 @@
 				040BA32120FDD3960075B9EB /* FTBDNews */,
 				044D8ED820FD8D7C005FDE2F /* AppDelegate.h */,
 				044D8ED920FD8D7C005FDE2F /* AppDelegate.m */,
-				044D8EDB20FD8D7C005FDE2F /* ViewController.h */,
-				044D8EDC20FD8D7C005FDE2F /* ViewController.m */,
 				044D8EE120FD8D7D005FDE2F /* Assets.xcassets */,
 				044D8EE320FD8D7D005FDE2F /* LaunchScreen.storyboard */,
 				044D8EE620FD8D7D005FDE2F /* Info.plist */,
@@ -251,7 +246,6 @@
 				04CA4B942100835E00BA9288 /* FTCalendarWeekTitleCell.m in Sources */,
 				04CA4B8220FE0FA200BA9288 /* FTBDNewsDataManager.m in Sources */,
 				04CA4B982100835E00BA9288 /* FTCalendarHeaderCell.m in Sources */,
-				044D8EDD20FD8D7C005FDE2F /* ViewController.m in Sources */,
 				04CA4B962100835E00BA9288 /* FTCalendarButton.m in Sources */,
 				04CA4B8520FE16FA00BA9288 /* FTBDNewsTableViewCell.m in Sources */,
 				040BA32520FDD3E40075B9EB /* FTBDNewsViewController.m in Sources */,

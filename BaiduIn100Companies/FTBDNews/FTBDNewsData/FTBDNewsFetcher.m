@@ -68,11 +68,11 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
     
     //https请求
     NSURLSessionDataTask *dataTask = [_session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if(data == nil) {
+        if (!data) {
             NSLog(@"加载图片时异常，错误原因：data为空");
             return;
         }
-        if(error != nil) {
+        if(error) {
             NSLog(@"加载新闻数据时异常，错误原因：%@", error.localizedDescription);
             return;
         }
@@ -91,15 +91,16 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
     [request setValue:FTBDNewsHttpReferrerContent forHTTPHeaderField:@"referer"];
 
     NSURLSessionDataTask *dataTask = [_session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-//        if(response != nil) {
+//        if (response != nil) {
 //            NSLog(@"FTBDNewsFetcher->requestBDNewsImage->length = %lld, name = %@", response.expectedContentLength, response.suggestedFilename);
 //        }
-        if(data == nil) {
+        if (!data) {
             NSLog(@"FTBDNewsFetcher->requestBDNewsImage->加载图片时异常，错误原因：data为空");
             return;
         }
-        if(error != nil) {
+        if (error) {
             NSLog(@"FTBDNewsFetcher->requestBDNewsImage->加载图片时异常，错误原因：%@", error.localizedDescription);
+            return;
         }
         _block(data);
     }];
@@ -123,7 +124,7 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
 //{
 //    long long expLength = response.expectedContentLength;
 //    NSLog(@"FTBDNewsFetcher->didReceiveResponse->length = %lld", expLength);
-//    if(expLength == -1) {
+//    if (expLength == -1) {
 //        completionHandler(NSURLSessionResponseCancel);
 //    } else {
 //        completionHandler(NSURLSessionResponseAllow);

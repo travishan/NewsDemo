@@ -29,7 +29,7 @@ typedef NS_ENUM(NSUInteger, FTCalendarHeaderActionType) {
 
 @interface FTCalendarHeaderCell : UICollectionViewCell
 
-@property (nonatomic, strong) id<FTCalendarHeaderDelegate> delegate;
+@property (strong, nonatomic) id<FTCalendarHeaderDelegate> delegate;
 
 /**
  * 每次刷新Collection View时调用该方法更新Header Cell中的View

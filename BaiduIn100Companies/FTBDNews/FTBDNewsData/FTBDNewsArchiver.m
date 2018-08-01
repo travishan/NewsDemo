@@ -28,17 +28,17 @@ static NSString * const sFTBDNewsKeywordFileName = @"FTBDNewsKeywordList";
            image:(NSDictionary<NSString *, UIImage *> *)imageDict
 {
     NSArray *allKeys = [newsDict allKeys];
-    if(allKeys == nil || allKeys.count == 0) {
+    if (allKeys == nil || allKeys.count == 0) {
         NSLog(@"FTBDNewsArchiver->saveNews->keywords列表为空, %@", allKeys);
         return NO;
     }
     //存储keyword list
-    if(![self saveKeywordList:allKeys]) {
+    if (![self saveKeywordList:allKeys]) {
         NSLog(@"FTBDNewsArchiver->saveNews->存储keyword列表失败");
         return NO;
     }
     //存储data
-    if(![self saveDatas:newsDict]) {
+    if (![self saveDatas:newsDict]) {
         NSLog(@"FTBDNewsArchiver->saveNews->存储newsDict失败");
         return NO;
     }
@@ -57,15 +57,15 @@ static NSString * const sFTBDNewsKeywordFileName = @"FTBDNewsKeywordList";
 {
     //读取本地的keyword列表，判断列表中是否有传入的keyword
     NSArray *kwList = [self readKeywordList];
-    if(kwList == nil) {
+    if (kwList == nil) {
         kwList = [NSArray array];
     }
 //    NSLog(@"FTBDNewsArchiver->saveData:news:->kwList:%@", kwList);
-    if(![kwList containsObject:keyword]) {
+    if (![kwList containsObject:keyword]) {
         //没有该keyword，则添加到kwList中
         kwList = [kwList arrayByAddingObject:keyword];
         //重新保存keywordList
-        if(![self saveKeywordList:kwList]){
+        if (![self saveKeywordList:kwList]){
             NSLog(@"FTBDNewsArchiver->saveData:news:->重新写入keyword列表失败，当前正要保存的keyword：%@", keyword);
             return NO;
         }
@@ -73,7 +73,7 @@ static NSString * const sFTBDNewsKeywordFileName = @"FTBDNewsKeywordList";
     //存储keyword对应的news
     NSString *path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:keyword];
     BOOL ret = [NSKeyedArchiver archiveRootObject:news toFile:path];
-    if(!ret) {
+    if (!ret) {
         NSLog(@"FTBDNewsArchiver->saveData:news:->写入文件失败，key：%@，targetPath：%@", keyword, path);
         return NO;
     }
@@ -89,7 +89,7 @@ static NSString * const sFTBDNewsKeywordFileName = @"FTBDNewsKeywordList";
         NSString *targetPath = [docPath stringByAppendingPathComponent:key];
         
         BOOL ret = [NSKeyedArchiver archiveRootObject:news toFile:targetPath];
-        if(!ret) {
+        if (!ret) {
             NSLog(@"FTBDNewsArchiver->saveDatas->data写入文件失败，key：%@，targetPath：%@", key, targetPath);
         }
     }
@@ -99,7 +99,7 @@ static NSString * const sFTBDNewsKeywordFileName = @"FTBDNewsKeywordList";
 - (void)readNews:(NSMutableDictionary *)newsDict
 {
     NSArray *keywordList = [self readKeywordList];
-    if(keywordList == nil) {
+    if (keywordList == nil) {
         NSLog(@"FTBDNewsArchiver->readNews->keywordlist读取失败");
         return;
     }
@@ -120,7 +120,7 @@ static NSString * const sFTBDNewsKeywordFileName = @"FTBDNewsKeywordList";
     for(NSString *key in keywordList) {
         NSString *targetPath = [docPath stringByAppendingPathComponent:key];
         FTBDNews *news = [NSKeyedUnarchiver unarchiveObjectWithFile:targetPath];
-        if(news == nil) {
+        if (news == nil) {
             NSLog(@"FTBDNewsArchiver->readDatas->data文件读取失败，key：%@，targetPath：%@", key, targetPath);
         }
         [newsDict setObject:news forKey:key];

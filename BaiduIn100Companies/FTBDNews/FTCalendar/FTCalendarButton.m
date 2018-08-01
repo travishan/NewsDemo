@@ -39,7 +39,7 @@
 
 - (void)btnAction:(UIButton *)sender
 {
-    if(self.btnBlock) {
+    if (self.btnBlock) {
         self.btnBlock(sender);
     }
 }

@@ -12,9 +12,9 @@
 {
     BOOL _isIndicating;
 }
-@property (nonatomic, strong) UIWebView *webView;
-@property (nonatomic, strong) UIActivityIndicatorView *indicatorView;
-@property (nonatomic, strong) NSString *webUrl;
+@property (strong, nonatomic) UIWebView *webView;
+@property (strong, nonatomic) UIActivityIndicatorView *indicatorView;
+@property (strong, nonatomic) NSString *webUrl;
 
 @end
 
@@ -70,7 +70,7 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    if(error != nil && error.code == NSURLErrorNotConnectedToInternet) {
+    if (error != nil && error.code == NSURLErrorNotConnectedToInternet) {
         [self stopIndicator];
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"糟糕" message:@"网页加载失败的感觉！您的网络好像不太好" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
@@ -87,7 +87,7 @@
 
 - (void)startIndicator
 {
-    if(!_isIndicating) {
+    if (!_isIndicating) {
         NSLog(@"FTBDNewsDetailsController->startIndicator->开始转菊花");
         [self.indicatorView startAnimating];
         _isIndicating = YES;
@@ -96,32 +96,11 @@
 
 - (void)stopIndicator
 {
-    if(_isIndicating) {
+    if (_isIndicating) {
         NSLog(@"FTBDNewsDetailsController->stopIndicator->停止转菊花");
         [self.indicatorView stopAnimating];
         _isIndicating = NO;
     }
 }
-
-
-//- (void)pressBack:(UIBarButtonItem *)sender
-//{
-//    [self.navigationController popViewControllerAnimated:YES];
-//}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

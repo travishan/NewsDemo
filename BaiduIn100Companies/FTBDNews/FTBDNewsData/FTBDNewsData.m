@@ -49,7 +49,7 @@ static void initWithCoder(id data, NSCoder *aDecoder)
 }
 
 - (nullable instancetype)initWithCoder:(nonnull NSCoder *)aDecoder {
-    if(self = [super init]) {
+    if (self = [super init]) {
         initWithCoder(self, aDecoder);
     }
     return self;
@@ -70,7 +70,7 @@ static void initWithCoder(id data, NSCoder *aDecoder)
 }
 
 - (nullable instancetype)initWithCoder:(nonnull NSCoder *)aDecoder {
-    if(self = [super init]) {
+    if (self = [super init]) {
         initWithCoder(self, aDecoder);
     }
     return self;

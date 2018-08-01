@@ -26,9 +26,9 @@
 
 @interface FTBDNewsDataManager : NSObject
 
-@property (nonatomic, weak) id<FTBDNewsDelegate> delegate;
+@property (weak, nonatomic) id<FTBDNewsDelegate> delegate;
 
-//@property (nonatomic, strong) NSArray *filterNewsData;
+//@property (strong, nonatomic) NSArray *filterNewsData;
 
 /**
  * 解析拉取的新闻数据

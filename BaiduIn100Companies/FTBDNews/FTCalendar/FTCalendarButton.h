@@ -19,6 +19,6 @@ typedef void (^FTCalendarButtonBlock)(UIButton *);
 
 @interface FTCalendarButton : UIButton
 
-@property (nonatomic, strong) FTCalendarButtonBlock btnBlock;
+@property (strong, nonatomic) FTCalendarButtonBlock btnBlock;
 
 @end

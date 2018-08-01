@@ -15,16 +15,16 @@
 @interface FTBDNewsData : NSObject <NSCoding>
 
 //新闻相关属性
-@property (nonatomic, strong) NSString *posterScreenName;
-@property (nonatomic, strong) NSString *url;
-@property (nonatomic, strong) NSDate *publishDate;
-@property (nonatomic, strong) NSString *timeStr;
-@property (nonatomic, strong) NSString *title;
-@property (nonatomic, strong) NSArray<NSString *> *imageUrls;
-@property (nonatomic, strong) NSString *newsId;
+@property (strong, nonatomic) NSString *posterScreenName;
+@property (strong, nonatomic) NSString *url;
+@property (strong, nonatomic) NSDate *publishDate;
+@property (strong, nonatomic) NSString *timeStr;
+@property (strong, nonatomic) NSString *title;
+@property (strong, nonatomic) NSArray<NSString *> *imageUrls;
+@property (strong, nonatomic) NSString *newsId;
 
 //辅助属性
-@property (nonatomic, assign) BOOL readed;
+@property (assign, nonatomic) BOOL readed;
 
 @end
 
@@ -35,10 +35,10 @@
 
 //自定义参数
 //搜索的关键字
-@property (nonatomic, strong) NSString *keyword;
+@property (strong, nonatomic) NSString *keyword;
 
 //用到的参数
-@property (nonatomic, strong) NSString *retcode;
-@property (nonatomic, strong) NSArray<FTBDNewsData *> *data;
+@property (strong, nonatomic) NSString *retcode;
+@property (strong, nonatomic) NSArray<FTBDNewsData *> *data;
 
 @end

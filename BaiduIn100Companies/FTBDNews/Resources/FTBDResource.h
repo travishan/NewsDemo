@@ -19,3 +19,5 @@ static NSString * const FTResourceDownArrowHighlight = @"skin_common_icon_arrow_
 
 static NSString * const FTResourceUpArrowNormal = @"skin_common_icon_arrow_up.png";
 static NSString * const FTResourceUpArrowHighlight = @"skin_common_icon_arrow_up_disabled.png";
+
+

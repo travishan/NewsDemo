@@ -93,6 +93,7 @@ static const int sFTMainSectionEdge = 20;//20
 
 - (void)layoutSubviews
 {
+    [super layoutSubviews];
     self.calendarCollectionView.frame = self.bounds;
     self.mainSectionCellWidth = (CGRectGetWidth(self.bounds) - sFTMainSectionEdge * 2) / 7;//减去mainsection两边边缘除以7
 }

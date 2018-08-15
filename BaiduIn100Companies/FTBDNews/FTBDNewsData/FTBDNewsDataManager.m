@@ -65,10 +65,14 @@ static const char * const FBBDNewsSerialNotifyQueueName = "FBBDNewsSerialNotifyQ
 
 - (void)pullBaiduNews:(NSString *)keyword date:(NSDate *)date
 {
-    __weak typeof(self) weakSelf = self;
+//    __weak typeof(self) weakSelf = self;
+    typeof(self) strongSelf = self;
     
     [_fetcher requestBDNews:keyword block:^(NSString *keyword, NSData *data) {
-        typeof(weakSelf) strongSelf = weakSelf;
+//        typeof(weakSelf) strongSelf = weakSelf;
+        if(!data) {
+            return;
+        }
         //获取数据，存储到字典中
         FTBDNews *res = [FTBDNewsDataManager analysisNews:keyword data:data];
         if (!res) {
@@ -255,13 +259,14 @@ static FTBDNewsDataManager *instance = nil;
 
 + (FTBDNewsDataManager *)sharedInstance
 {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        if (instance == nil) {
-            instance = [[FTBDNewsDataManager alloc] init];
-        }
-    });
-    return instance;
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//        if (instance == nil) {
+//            instance = [[FTBDNewsDataManager alloc] init];
+//        }
+//    });
+//    return instance;
+    return [[self alloc] init];
 }
 
 + (instancetype)allocWithZone:(struct _NSZone *)zone

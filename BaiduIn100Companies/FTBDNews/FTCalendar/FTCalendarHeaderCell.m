@@ -9,6 +9,8 @@
 #import "FTCalendarHeaderCell.h"
 #import "FTCalendarHelper.h"
 #import "FTBDResource.h"
+#import "FTBDMarcoFunction.h"
+#import "EXTScope.h"
 
 static const CGFloat kFTCalendarHeaderHeight = 80;//该view的高度
 static const CGFloat kFTCalendarHeaderHalfHeight = kFTCalendarHeaderHeight / 2;//该view高度的一半
@@ -58,7 +60,7 @@ static const NSInteger kFTCalendarMonthLabelTag = 200;
 //    self.dateLabelBtn.frame = CGRectMake(0, 0, FTCalendarHeaderDateLabelWidth, FTCalendarHeaderHalfHeight);
 //    self.dateLabelBtn.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
 //    [self addSubview:self.dateLabelBtn];
-    __weak typeof(self) weakSelf = self;
+    
     
     //左上角所有时间button
     self.alltimeBtn = [FTCalendarButton buttonWithType:UIButtonTypeCustom];
@@ -73,16 +75,18 @@ static const NSInteger kFTCalendarMonthLabelTag = 200;
     [self.doneBtn setTitle:@"确认" forState:UIControlStateNormal];
     [self.doneBtn setTitleColor:[UIColor colorWithRed:51/255.0 green:120/255.0 blue:221/255.0 alpha:1/1.0] forState:UIControlStateNormal];
     self.doneBtn.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    
+    ft_weakify_self;
     self.doneBtn.btnBlock = ^(UIButton *btn) {
-        typeof(weakSelf) strongSelf = weakSelf;
-        if ([strongSelf.delegate respondsToSelector:@selector(headerCellButtonAction:)]) {
-            [strongSelf.delegate headerCellButtonAction:FTCalendarHeaderActionDone];
+        ft_strongify_self;
+        if ([self.delegate respondsToSelector:@selector(headerCellButtonAction:)]) {
+            [self.delegate headerCellButtonAction:FTCalendarHeaderActionDone];
         }
     };
     self.alltimeBtn.btnBlock = ^(UIButton *btn) {
-        typeof(weakSelf) strongSelf = weakSelf;
-        if ([strongSelf.delegate respondsToSelector:@selector(headerCellButtonAction:)]) {
-            [strongSelf.delegate headerCellButtonAction:FTCalendarHeaderActionAlltime];
+        ft_strongify_self;
+        if ([self.delegate respondsToSelector:@selector(headerCellButtonAction:)]) {
+            [self.delegate headerCellButtonAction:FTCalendarHeaderActionAlltime];
         }
     };
     [self addSubview:self.doneBtn];
@@ -90,8 +94,10 @@ static const NSInteger kFTCalendarMonthLabelTag = 200;
 
 - (void)initYearView {
     __weak FTCalendarHeaderCell *wSelf = self;
+//    ft_weakify_self;
     //←，→两个按钮的block回调
     FTCalendarButtonBlock block = ^(UIButton *btn){
+//        ft_strongify_self;
         if ([wSelf.delegate respondsToSelector:@selector(buttonActionMoveYear:)]) {
             NSInteger step = 0;
             if ((btn.tag + 1) == kFTCalendarYearLabelTag){//左箭头

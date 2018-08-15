@@ -24,6 +24,7 @@
 		04CA4B972100835E00BA9288 /* FTCalendarOneDayCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CA4B8F2100835E00BA9288 /* FTCalendarOneDayCell.m */; };
 		04CA4B982100835E00BA9288 /* FTCalendarHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CA4B912100835E00BA9288 /* FTCalendarHeaderCell.m */; };
 		04CA4B9F2105B88000BA9288 /* FTBDNewsArchiver.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CA4B9E2105B88000BA9288 /* FTBDNewsArchiver.m */; };
+		946E34268DDB2F937867BBB0 /* libPods-BaiduIn100Companies.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F4B31B5EE01387D77BAA23F3 /* libPods-BaiduIn100Companies.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		040BA32420FDD3E40075B9EB /* FTBDNewsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FTBDNewsViewController.m; sourceTree = "<group>"; };
 		040BA32620FDDC200075B9EB /* FTBDNewsDetailsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTBDNewsDetailsController.h; sourceTree = "<group>"; };
 		040BA32720FDDC200075B9EB /* FTBDNewsDetailsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FTBDNewsDetailsController.m; sourceTree = "<group>"; };
+		043C34EE2112A149007C072E /* FTBDMarcoFunction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTBDMarcoFunction.h; sourceTree = "<group>"; };
 		044D8ED520FD8D7C005FDE2F /* BaiduIn100Companies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BaiduIn100Companies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		044D8ED820FD8D7C005FDE2F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		044D8ED920FD8D7C005FDE2F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -61,6 +63,9 @@
 		04CA4B9A21017B1200BA9288 /* FTBDResource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTBDResource.h; sourceTree = "<group>"; };
 		04CA4B9D2105B88000BA9288 /* FTBDNewsArchiver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTBDNewsArchiver.h; sourceTree = "<group>"; };
 		04CA4B9E2105B88000BA9288 /* FTBDNewsArchiver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FTBDNewsArchiver.m; sourceTree = "<group>"; };
+		BFFB81AC94E2B9AD68D16D48 /* Pods-BaiduIn100Companies.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduIn100Companies.release.xcconfig"; path = "Pods/Target Support Files/Pods-BaiduIn100Companies/Pods-BaiduIn100Companies.release.xcconfig"; sourceTree = "<group>"; };
+		CEDA130AACC26C3013169C81 /* Pods-BaiduIn100Companies.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduIn100Companies.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BaiduIn100Companies/Pods-BaiduIn100Companies.debug.xcconfig"; sourceTree = "<group>"; };
+		F4B31B5EE01387D77BAA23F3 /* libPods-BaiduIn100Companies.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BaiduIn100Companies.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				946E34268DDB2F937867BBB0 /* libPods-BaiduIn100Companies.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +87,7 @@
 				04CA4B862100835E00BA9288 /* FTCalendar */,
 				040BA32220FDD3BE0075B9EB /* FTBDNewsViews */,
 				044D8EEF20FD8E53005FDE2F /* FTBDNewsData */,
+				043C34EE2112A149007C072E /* FTBDMarcoFunction.h */,
 			);
 			path = FTBDNews;
 			sourceTree = "<group>";
@@ -103,6 +110,8 @@
 			children = (
 				044D8ED720FD8D7C005FDE2F /* BaiduIn100Companies */,
 				044D8ED620FD8D7C005FDE2F /* Products */,
+				27FF598A0E2AB1527F7B066C /* Pods */,
+				9FA0C856849E1931D3F5732E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -170,6 +179,23 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		27FF598A0E2AB1527F7B066C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CEDA130AACC26C3013169C81 /* Pods-BaiduIn100Companies.debug.xcconfig */,
+				BFFB81AC94E2B9AD68D16D48 /* Pods-BaiduIn100Companies.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		9FA0C856849E1931D3F5732E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F4B31B5EE01387D77BAA23F3 /* libPods-BaiduIn100Companies.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -177,9 +203,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 044D8EEB20FD8D7D005FDE2F /* Build configuration list for PBXNativeTarget "BaiduIn100Companies" */;
 			buildPhases = (
+				BACB26681AE310288229B624 /* [CP] Check Pods Manifest.lock */,
 				044D8ED120FD8D7C005FDE2F /* Sources */,
 				044D8ED220FD8D7C005FDE2F /* Frameworks */,
 				044D8ED320FD8D7C005FDE2F /* Resources */,
+				F19C2AA8017FEE1D5B257CF5 /* [CP] Embed Pods Frameworks */,
+				3C3712560DBDDA73B9B888ED /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -233,6 +262,57 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3C3712560DBDDA73B9B888ED /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BaiduIn100Companies/Pods-BaiduIn100Companies-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BACB26681AE310288229B624 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BaiduIn100Companies-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F19C2AA8017FEE1D5B257CF5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BaiduIn100Companies/Pods-BaiduIn100Companies-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		044D8ED120FD8D7C005FDE2F /* Sources */ = {
@@ -383,6 +463,7 @@
 		};
 		044D8EEC20FD8D7D005FDE2F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CEDA130AACC26C3013169C81 /* Pods-BaiduIn100Companies.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -401,6 +482,7 @@
 		};
 		044D8EED20FD8D7D005FDE2F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BFFB81AC94E2B9AD68D16D48 /* Pods-BaiduIn100Companies.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

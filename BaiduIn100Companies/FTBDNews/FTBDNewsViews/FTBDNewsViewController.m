@@ -91,8 +91,9 @@ FTCalendarDelegate>
 }
 
 
-- (void)viewWillLayoutSubviews {
-    
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
     CGFloat width = CGRectGetWidth(self.view.bounds);
     CGFloat height = CGRectGetHeight(self.view.bounds);
     //搜索框与日期筛选平分屏幕的宽度
@@ -118,6 +119,7 @@ FTCalendarDelegate>
 }
 
 #pragma mark - Initial
+
 
 - (void)initViews
 {

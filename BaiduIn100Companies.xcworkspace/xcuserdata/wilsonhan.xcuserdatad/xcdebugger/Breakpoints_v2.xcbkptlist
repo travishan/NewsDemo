@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsData/FTBDNewsDataManager.m"
+            timestampString = "555924786.614536"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
+            landmarkName = "+sharedInstance"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BaiduIn100Companies/FTBDNews/FTBDNewsData/FTBDNewsDataManager.m"
+            timestampString = "555924786.615191"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "274"
+            endingLineNumber = "274"
+            landmarkName = "+allocWithZone:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "+[FTBDNewsDataManager allocWithZone:]"
+                  moduleName = "BaiduIn100Companies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wilsonhan/Documents/wilsonhans%20projects/iOSCheckProjects/NewsDemo/BaiduIn100Companies/FTBDNews/FTBDNewsData/FTBDNewsDataManager.m"
+                  timestampString = "555924786.690107"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "275"
+                  endingLineNumber = "275"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__37+[FTBDNewsDataManager allocWithZone:]_block_invoke"
+                  moduleName = "BaiduIn100Companies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wilsonhan/Documents/wilsonhans%20projects/iOSCheckProjects/NewsDemo/BaiduIn100Companies/FTBDNews/FTBDNewsData/FTBDNewsDataManager.m"
+                  timestampString = "555924786.692955"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "276"
+                  endingLineNumber = "276"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__destroy_helper_block_.175"
+                  moduleName = "BaiduIn100Companies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wilsonhan/Documents/wilsonhans%20projects/iOSCheckProjects/NewsDemo/BaiduIn100Companies/FTBDNews/FTBDNewsData/FTBDNewsDataManager.m"
+                  timestampString = "555924786.696454"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "275"
+                  endingLineNumber = "275"
+                  offsetFromSymbolStart = "8">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

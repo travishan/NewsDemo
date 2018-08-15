@@ -65,7 +65,6 @@ static NSString *FTBDNewsURLMaker(NSString *keyword)
     //路径中包含汉字，必须转换字符集
     NSString *path = [FTBDNewsURLMaker(keyword) stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSURL *url = [NSURL URLWithString:path];
-    
     //https请求
     NSURLSessionDataTask *dataTask = [_session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (!data) {
